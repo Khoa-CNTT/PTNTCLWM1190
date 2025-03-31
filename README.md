@@ -9,4 +9,6 @@
 
 ✨ <span style="color:green;">Cảm ơn bạn đã ghé thăm!</span> ✨
 
+<p><i>Em dùng template mẫu nên CSS và SCSS chiếm hơi nhiều.</i></p>
+
 </div>
