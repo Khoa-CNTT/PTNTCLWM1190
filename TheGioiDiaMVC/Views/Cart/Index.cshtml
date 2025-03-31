@@ -1,0 +1,114 @@
+﻿@model IEnumerable<TheGioiDiaMVC.ViewModels.CartItem>
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">Giỏ hàng</h1>
+    <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="#">Trang</a></li>
+        <li class="breadcrumb-item active text-white">Giỏ hàng</li>
+    </ol>
+</div>
+
+
+
+<!-- Single Page Header End -->
+<!-- Cart Page Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Thành tiền</th>
+                        <th scope="col">Hoàn lại</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item in Model){
+                    <tr>
+                        <th scope="row">
+                            <div class="d-flex align-items-center">
+                                <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="@item.TenHh">
+                            </div>
+                        </th>
+                        <td>
+                            <p class="mb-0 mt-4">
+                                <a asp-action="Detail" asp-controller="HangHoa" asp-route-id="@item.MaHh">
+                                    @item.TenHh
+                                    </a>
+                            </p>
+                        </td>
+                        <td>
+                                <p class="mb-0 mt-4">@item.DonGia.ToString("#,##0 VND")</p>
+                        </td>
+                        <td>
+                            <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div class="input-group-btn">
+                                </div>
+                                <input type="text" class="form-control form-control-sm text-center border-0" value="@item.SoLuong">
+                                <div class="input-group-btn">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                                <p class="mb-0 mt-4">@item.ThanhTien.ToString("#,##0 VND")</p>
+                        </td>
+                        <td>
+                            <a asp-action="RemoveCart" asp-controller="Cart" asp-route-id="@item.MaHh" class="btn btn-md rounded-circle bg-light border mt-4">
+                                <i class="fa fa-times text-danger"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+                  <div class="mt-5">
+                    <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Nhập mã">
+                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Sử dụng coupon</button>
+                </div>
+
+        <div class="row g-4 justify-content-end">
+            <div class="col-lg-8">
+                <div class="bg-light rounded">
+                    <div class="p-4">
+                        <h1 class="display-6 mb-4 text-center">Tổng tiền <span class="fw-normal">thanh toán</span></h1>
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="mb-0">Tổng tạm tính:</h5>
+                            <p class="mb-0">@Model.Sum(p => p.ThanhTien).ToString("#,##0 VND")</p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="mb-0">Phí vận chuyển</h5>
+                            <p class="mb-0">30,000 VND</p>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fs-5 fw-bold">
+                            <h5 class="mb-0">Tổng cộng</h5>
+                            <p class="mb-0">@((Model.Sum(p => p.ThanhTien) + 30000).ToString("#,##0 VND"))</p>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a class="btn btn-success rounded-pill px-5 py-3 fw-bold" asp-action="Checkout" asp-controller="Cart">
+                                Tiến hành thanh toán
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+                <a class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                   asp-action="TheoDoi" asp-controller="Cart">Theo dõi đơn hàng</a>
+    </div>
+</div>
+<!-- Cart Page End -->
+

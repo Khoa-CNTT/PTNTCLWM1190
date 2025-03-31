@@ -1,0 +1,79 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TheGioiDiaMVC.Data.KhachHang
+
+@{
+    ViewData["Title"] = "Thêm Nhân Sự";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+        Thêm nhân sự
+    </h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" asp-action="Them">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+                    <!-- Cột bên trái -->
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="MaKh" class="form-label">Tên đăng nhập</label>
+                            <input asp-for="MaKh" class="form-control" />
+                            <span asp-validation-for="MaKh" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="MatKhau" class="form-label">Mật khẩu</label>
+                            <input asp-for="MatKhau" type="password" class="form-control" />
+                            <span asp-validation-for="MatKhau" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="HoTen" class="form-label">Họ tên</label>
+                            <input asp-for="HoTen" class="form-control" />
+                            <span asp-validation-for="HoTen" class="text-danger"></span>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input asp-for="HieuLuc" class="form-check-input" id="HieuLuc" />
+                            <label class="form-check-label" for="HieuLuc">
+                                @Html.DisplayNameFor(model => model.HieuLuc)
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Cột bên phải -->
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="DiaChi" class="form-label">Địa chỉ</label>
+                            <input asp-for="DiaChi" class="form-control" />
+                            <span asp-validation-for="DiaChi" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="DienThoai" class="form-label">Điện thoại</label>
+                            <input asp-for="DienThoai" class="form-control" />
+                            <span asp-validation-for="DienThoai" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="VaiTro" class="form-label">Vai trò</label>
+                            <select asp-for="VaiTro" class="form-control">
+                                <option value="0">Khách hàng</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Nhân viên</option>
+                            </select>
+                            <span asp-validation-for="VaiTro" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <input type="submit" value="Thêm" class="btn btn-primary px-4" />
+                    <a asp-action="Index" class="btn btn-secondary px-4">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

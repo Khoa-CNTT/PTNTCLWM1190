@@ -1,0 +1,77 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.Loai>
+@using X.PagedList.Mvc.Core
+@{
+    ViewData["Title"] = "Quản lý thể loại";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-center mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Quản lý danh mục
+</h2>
+
+
+<!-- Nút thêm khách hàng -->
+<a asp-action="Them" class="btn" style="background-color: #7ed321; color: white;">Thêm danh mục </a>
+
+<!-- Bảng danh sách thể loại -->
+<table class="table table-bordered table-hover text-center">
+    <thead class="table-success">
+        <tr>
+            <th>Tên Loại</th>
+            <th>Mô tả</th>
+            <th>Hình</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+             <thead class="table-light">
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.TenLoai)</td>
+                <td>@Html.DisplayFor(modelItem => item.MoTa)</td>
+                <td>
+                    <img src="~/Hinh/Loai/@item.Hinh" class="img-fluid rounded" style="width: 60px; height: 60px;" />
+                </td>
+                <td>
+                    <a asp-action="Sua" asp-route-id="@item.MaLoai" class="btn btn-warning btn-sm">✏ Sửa</a>
+                    <a href="@Url.Action("Delete", "DanhSachKhachHang", new { area = "Admin", id = item.MaLoai })"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn xoá?')">🗑 Xoá</a>
+                </td>
+            </tr>
+            </thead>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link bg-success text-white" href="@Url.Action("Loai", new { page = Model.PageNumber - 1 })">⬅ Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link bg-success text-white" href="@Url.Action("Loai", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link bg-success text-white" href="@Url.Action("Loai", new { page = Model.PageNumber + 1 })">Tiếp ➡</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<!-- Nút quay lại -->
+<a href="@Url.Action("Index", "DanhSachHangHoa", new { area = "Admin" })" class="btn btn-primary mt-3">⬅ Quay lại</a>

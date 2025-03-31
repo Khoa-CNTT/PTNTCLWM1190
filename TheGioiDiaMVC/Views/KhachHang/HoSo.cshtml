@@ -1,0 +1,93 @@
+﻿@model TheGioiDiaMVC.ViewModels.HoSoVM
+@{
+    ViewData["Title"] = "Hồ Sơ Cá Nhân";
+}
+<br />
+<br />
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-3 rounded-3" style="max-width: 600px; width: 100%;">
+        <h2 class="text-center mb-3 text-primary">Hồ Sơ Cá Nhân</h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        <form method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken() <!-- Bảo mật CSRF -->
+
+            <div class="mb-2">
+                <label asp-for="HoTen" class="form-label">Họ Tên<sup>*</sup></label>
+                <input asp-for="HoTen" class="form-control rounded-2" placeholder="Nhập họ tên" />
+                <span class="text-danger" asp-validation-for="HoTen"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="Email" class="form-label">Email<sup>*</sup></label>
+                <input asp-for="Email" class="form-control rounded-2" type="email" placeholder="Nhập email" id="email" />
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="NgaySinh" class="form-label">Ngày Sinh</label>
+                <input asp-for="NgaySinh" class="form-control rounded-2" type="date" />
+                <span class="text-danger" asp-validation-for="NgaySinh"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="DienThoai" class="form-label">Điện Thoại<sup>*</sup></label>
+                <input asp-for="DienThoai" class="form-control rounded-2" type="tel" placeholder="Nhập số điện thoại" id="dienThoai" />
+                <span class="text-danger" asp-validation-for="DienThoai"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="DiaChi" class="form-label">Địa Chỉ<sup>*</sup></label>
+                <input asp-for="DiaChi" class="form-control rounded-2" placeholder="Nhập địa chỉ" />
+                <span class="text-danger" asp-validation-for="DiaChi"></span>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">Ảnh đại diện</label>
+                <input type="file" name="Hinh" class="form-control rounded-2" />
+            </div>
+
+            <div class="mb-2 d-none" id="passwordField">
+                <label class="form-label">Mật khẩu hiện tại (cần nhập khi thay đổi Email hoặc Số điện thoại)</label>
+                <input type="password" name="MatKhauHienTai" class="form-control rounded-2" placeholder="Nhập mật khẩu hiện tại" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 rounded-2 fw-bold">Lưu</button>
+            <div class="text-center mt-3">
+                <a asp-action="DoiMatKhau" class="btn btn-warning fw-bold text-white w-100 py-2 rounded-2">Đổi mật khẩu</a>
+
+            </div>
+
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="DangXuat" class="btn btn-danger fw-bold w-100 py-2 rounded-2">Đăng xuất</a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let email = document.getElementById("email");
+            let dienThoai = document.getElementById("dienThoai");
+            let passwordField = document.getElementById("passwordField");
+
+            function checkPasswordField() {
+                if (email.value !== "@Model.Email" || dienThoai.value !== "@Model.DienThoai") {
+                    passwordField.classList.remove("d-none");
+                } else {
+                    passwordField.classList.add("d-none");
+                }
+            }
+
+            email.addEventListener("input", checkPasswordField);
+            dienThoai.addEventListener("input", checkPasswordField);
+        });
+    </script>
+}

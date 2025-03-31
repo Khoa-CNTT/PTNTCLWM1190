@@ -1,0 +1,99 @@
+﻿@model TheGioiDiaMVC.ViewModels.DangKyVM
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+<br />
+<br />
+<br />
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-4 rounded-4 border-0" style="max-width: 600px; width: 100%;">
+        <h2 class="text-center mb-4 text-primary fw-bold">Đăng ký tài khoản</h2>
+        <form asp-action="DangKy" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label asp-for="@Model.MaKh" class="form-label fw-semibold">Tên đăng nhập<sup>*</sup></label>
+                <input asp-for="@Model.MaKh" class="form-control rounded-pill" placeholder="Nhập tên đăng nhập" />
+                <span asp-validation-for="@Model.MaKh" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 d-flex gap-3">
+                <div class="w-50">
+                    <label asp-for="@Model.MatKhau" class="form-label fw-semibold">Mật Khẩu<sup>*</sup></label>
+                    <input asp-for="@Model.MatKhau" class="form-control rounded-pill" type="password" placeholder="Nhập mật khẩu" />
+                    <span asp-validation-for="@Model.MatKhau" class="text-danger"></span>
+                </div>
+                <div class="w-50">
+                    <label asp-for="@Model.NhapLaiMatKhau" class="form-label fw-semibold">Nhập lại mật khẩu<sup>*</sup></label>
+                    <input asp-for="@Model.NhapLaiMatKhau" class="form-control rounded-pill" type="password" placeholder="Nhập lại mật khẩu" />
+                    <span asp-validation-for="@Model.NhapLaiMatKhau" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="@Model.HoTen" class="form-label fw-semibold">Họ Tên<sup>*</sup></label>
+                <input asp-for="@Model.HoTen" class="form-control rounded-pill" placeholder="Nhập họ tên" />
+                <span asp-validation-for="@Model.HoTen" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 d-flex gap-3">
+                <div class="w-50">
+                    <label class="form-label fw-semibold">Giới tính</label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input asp-for="@Model.GioiTinh" class="form-check-input" id="gioiTinhNam" />
+                            <label class="form-check-label" for="gioiTinhNam">Nam</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="nuCheckbox" disabled />
+                            <label class="form-check-label" for="nuCheckbox">Nữ</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-50">
+                    <label asp-for="@Model.NgaySinh" class="form-label fw-semibold">Ngày Sinh</label>
+                    <input asp-for="@Model.NgaySinh" class="form-control rounded-pill" type="date" />
+                    <span asp-validation-for="@Model.NgaySinh" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="@Model.DiaChi" class="form-label fw-semibold">Địa Chỉ<sup>*</sup></label>
+                <input asp-for="@Model.DiaChi" class="form-control rounded-pill" placeholder="Nhập địa chỉ" />
+                <span asp-validation-for="@Model.DiaChi" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 d-flex gap-3">
+                <div class="w-50">
+                    <label asp-for="@Model.DienThoai" class="form-label fw-semibold">Điện Thoại<sup>*</sup></label>
+                    <input asp-for="@Model.DienThoai" class="form-control rounded-pill" type="tel" placeholder="Nhập số điện thoại" />
+                    <span asp-validation-for="@Model.DienThoai" class="text-danger"></span>
+                </div>
+                <div class="w-50">
+                    <label asp-for="@Model.Email" class="form-label fw-semibold">Email<sup>*</sup></label>
+                    <input asp-for="@Model.Email" class="form-control rounded-pill" type="email" placeholder="Nhập email" />
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Hình ảnh đại diện<sup>*</sup></label>
+                <input type="file" name="Hinh" class="form-control rounded-pill" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm">Đăng ký</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var gioiTinhCheckbox = document.getElementById("gioiTinhNam");
+        var nuCheckbox = document.getElementById("nuCheckbox");
+
+        function updateNuCheckbox() {
+            nuCheckbox.checked = !gioiTinhCheckbox.checked;
+        }
+
+        gioiTinhCheckbox.addEventListener("change", updateNuCheckbox);
+        updateNuCheckbox();
+    });
+</script>

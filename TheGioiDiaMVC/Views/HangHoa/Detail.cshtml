@@ -1,0 +1,261 @@
+﻿@model TheGioiDiaMVC.ViewModels.ChiTietHangHoaVM
+@{
+    ViewData["Title"] = "Detail";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+    TempData.Remove("SuccessMessage"); // Xóa sau khi hiển thị
+}
+
+
+<!---------- tiêu đề trang đơn ----------->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">Detail</h1>
+    <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Hàng hoá</a></li>
+        <li class="breadcrumb-item active text-white">@Model.TenHH</li>
+    </ol>
+</div>
+<!-- ---------------------------------- -->
+
+<!---- Hiển thị thông báo "Thêm giỏ hàng thành công"----->
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<!--------------------------------------------------------->
+
+
+<!---------------- chi tiết sản phẩm -------------------->
+<div class="container-fluid py-5 mt-5">
+    <div class="container py-5">
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8 col-xl-9">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div id="productImagesCarousel" class="carousel slide border rounded" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="~/Hinh/HangHoa/@Model.Hinh" class="img-fluid rounded w-100 zoom-effect" alt="@Model.TenHH">
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.Hinh2))
+                                {
+                                    <div class="carousel-item">
+                                        <img src="~/Hinh/HangHoa/@Model.Hinh2" class="img-fluid rounded w-100 zoom-effect" alt="@Model.TenHH">
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Hinh3))
+                                {
+                                    <div class="carousel-item">
+                                        <img src="~/Hinh/HangHoa/@Model.Hinh3" class="img-fluid rounded w-100 zoom-effect" alt="@Model.TenHH">
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+                        <h4 class="fw-bold mb-3">@Model.TenHH</h4>
+                        <p class="mb-3">Category: @Model.TenLoai</p>
+                        <h5 class="fw-bold mb-3">@Model.DonGia.ToString("#,##0 VND")</h5>
+                        <div class="d-flex mb-4">
+                        </div>
+                        <p class="mb-4">@Model.MoTaNgan</p>
+                        <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.MaHh">
+                        <div class="input-group quantity mb-5" style="width: 100px;">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" type="button">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm text-center border-0" value="1" name="quantity" >
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" type="button">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                            <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.MaHh">
+                                <div class="input-group quantity mb-5" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+                                    <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
+                                </button>
+                            </form>
+                        </form>
+                    </div>
+<!--------------------------------------------------->
+
+
+<!---------Thông tin sản phẩm--------->
+                    <div class="col-lg-12">
+                        <nav>
+                            <div class="nav nav-tabs mb-3">
+                                <button class="nav-link active border-white border-bottom-0" type="button" role="tab"
+                                        id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
+                                        aria-controls="nav-about" aria-selected="true">
+                                    Thông tin 
+                                </button>
+                            </div>
+                        </nav>
+                        <div class="tab-content mb-5">
+                            <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                <div class="product-detail">
+                                    <h3>Chi tiết sản phẩm:</h3>
+                                    <p>@Html.Raw(Model.ChiTiet)</p>
+                                    @if (!string.IsNullOrEmpty(Model.SpotifyUri))
+                                    {
+                                        <h5 class="fw-bold mb-3">🎵 Nghe thử</h5>
+                                        <iframe style="border-radius:12px"
+                                                src="https://open.spotify.com/embed/album/@Model.SpotifyUri"
+                                                width="100%" height="380" frameborder="0"
+                                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+                                        </iframe>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--------------------------------------------------->
+
+<!-------------Danh mục đĩa----------->
+            <div class="col-lg-4 col-xl-3">
+                <div class="row g-4 fruite">
+                    <div class="col-lg-12">
+                        <div class="input-group w-100 mx-auto d-flex mb-4">
+                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                        </div>
+                        @await Component.InvokeAsync("MenuLoai")
+                    </div>
+<!--------------------------------------------------->
+
+<!---------Gợi ý sản phẩm giảm giá------------>
+                    <div class="col-lg-12">
+                        <h4 class="mb-4">Sản phẩm giảm giá</h4>
+                        <div class="d-flex align-items-center justify-content-start">
+                            <div class="rounded" style="width: 100px; height: 100px;">
+                                <img src="~/Hinh/HangHoa/cocan.png" class="img-fluid rounded" alt="Image">
+                            </div>
+                            <div>
+                                <h6 class="mb-2">Conan Gray - Superache (Red) - Băng Cassette</h6>
+                                <div class="d-flex mb-2">
+
+                                </div>
+                                <div class="d-flex mb-2">
+                                    <h5 class="fw-bold me-2">320,000vnd</h5>
+                                    <h5 class="text-danger text-decoration-line-through">600,000</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-start">
+                            <div class="rounded" style="width: 100px; height: 100px;">
+                                <img src="~/Hinh/HangHoa/cs1.png" class="img-fluid rounded" alt="">
+                            </div>
+                            <div>
+                                <h6 class="mb-2">The Weeknd-The Highlights-Băng Cassette</h6>
+                                <div class="d-flex mb-2">
+                                </div>
+                                <div class="d-flex mb-2">
+                                    <h5 class="fw-bold me-2">600,000vnd</h5>
+                                    <h5 class="text-danger text-decoration-line-through">900,000vnd</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-start">
+                            <div class="rounded" style="width: 100px; height: 100px;">
+                                <img src="~/Hinh/HangHoa/sa3.png" class="img-fluid rounded" alt="">
+                            </div>
+                            <div>
+                                <h6 class="mb-2">NSYNC - Better Place - Đĩa Than</h6>
+                                <div class="d-flex mb-2">
+                                </div>
+                                <div class="d-flex mb-2">
+                                    <h5 class="fw-bold me-2">550,000vnd</h5>
+                                    <h5 class="text-danger text-decoration-line-through">800,000vnd</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center my-4">
+                            <a href="/HangHoa?loai=1007" class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem tại đây</a>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="position-relative">
+                            <img src="~/Hinh/HangHoa/ban.png" class="img-fluid w-100 rounded" alt="">
+                            <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
+                                <h3 class="text-secondary fw-bold">CD <br> LOOP <br> 2025</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+@*         ________________________________________________________________________________ *@
+
+        <h1 class="fw-bold mb-0">Có thể xem thêm</h1>
+        <div class="vesitable">
+            <div class="owl-carousel vegetable-carousel justify-content-center">
+                @foreach (var item in Model.SanPhamLienQuan)
+                {
+                    <a href="/HangHoa/Detail/@item.MaHh" class="text-decoration-none">
+                        <div class="border border-primary rounded position-relative vesitable-item p-3">
+                            <div class="vesitable-img">
+                                <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid w-100 rounded-top" alt="@item.TenHH">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">CD</div>
+                            <div class="p-4 pb-0 rounded-bottom">
+                                <h4 class="text-dark">@item.TenHH</h4>
+                                <p class="text-muted">@item.MoTaNgan</p>
+                                <div class="d-flex justify-content-between flex-lg-wrap">
+                                    <p class="text-dark fs-5 fw-bold">@item.DonGia.ToString("#,##0 VND")</p>
+
+                                    <button type="button" class="btn border border-secondary rounded-pill px-2 text-primary"
+                                            onclick="event.preventDefault(); window.location.href='/Cart/AddToCart/@item.MaHh';">
+                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<!-- Single Product End -->
+
+                                            <style>
+    .zoom-effect {
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .zoom-effect:hover {
+            transform: scale(1.5); 
+        }
+
+                                            </style>

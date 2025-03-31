@@ -1,0 +1,83 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TheGioiDiaMVC.Data.KhachHang
+
+@{
+    ViewData["Title"] = "Sửa Khách Hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Chỉnh sửa nhân sự
+</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="post" asp-action="Sua">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MaKh" />
+
+            <div class="row">
+                <!-- Cột bên trái -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="HoTen" class="control-label">Họ tên</label>
+                        <input asp-for="HoTen" class="form-control" />
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
+                        <input asp-for="NgaySinh" type="date" class="form-control" />
+                        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="DiaChi" class="control-label">Địa chỉ</label>
+                        <textarea asp-for="DiaChi" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                    </div>
+                </div>
+                <!-- Cột bên phải -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="DienThoai" class="control-label">Điện thoại</label>
+                        <input asp-for="DienThoai" type="tel" class="form-control" />
+                        <span asp-validation-for="DienThoai" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="control-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Hinh" class="control-label">Hinh</label>
+                        <input asp-for="Hinh" class="form-control" />
+                        <span asp-validation-for="Hinh" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" asp-for="HieuLuc" id="HieuLuc" />
+                            <label class="form-check-label" for="HieuLuc">
+                                @Html.DisplayNameFor(model => model.HieuLuc)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="VaiTro" class="control-label">Vai trò</label>
+                        <select asp-for="VaiTro" class="form-control">
+                            <option value="0">Khách hàng</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Nhân viên</option>
+                        </select>
+                        <span asp-validation-for="VaiTro" class="text-danger"></span>
+                    </div>
+                    <!-- CHỖ NÀY DÙNG ĐỂ CHIA QUA BÊN PHẢI NỮA -->
+                    <!-- Bạn có thể thêm các trường khác vào đây nếu cần -->
+                </div>
+            </div>
+
+            <div class="form-group text-center mt-4">
+                <button type="submit" class="btn btn-primary px-4">Lưu</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+

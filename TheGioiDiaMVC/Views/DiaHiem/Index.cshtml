@@ -1,0 +1,172 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.ViewModels.DiaHiemVM>
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewData["Title"] = "Chợ Đĩa Hiếm";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">CD LOOP – Rao Bán Ngay!</h1>
+</div>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-end gap-3 mb-4">
+        <a asp-action="QuanLyTin" class="btn btn-success btn-lg px-4">📝 Tin của bạn</a>
+        <a asp-action="Create" class="btn btn-primary btn-lg px-4">📀 Đăng Đĩa</a>
+    </div>
+
+    <!-- #region thông báo -->
+    @if (TempData["ThemTin"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+            @TempData["ThemTin"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <!-- #endregion -->
+
+    <!-- Tìm kiếm theo tình trạng -->
+    <form asp-action="Search" method="get" class="mb-4">
+        <div class="row g-2">
+            <a for="tinhTrang" class="form-label">Tình trạng</a>
+            <div class="col-md-3">
+                <select name="tinhTrang" id="tinhTrang" class="form-select rounded-pill">
+                    <option value="">Tất cả</option>
+                    <option value="0">Mới</option>
+                    <option value="1">Đã qua sử dụng</option>
+                    <option value="2">Giá trị trưng bày</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary rounded-pill px-4">🔍 Tìm kiếm</button>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- Tìm kiếm theo giá -->
+    <form asp-action="SearchGia" method="get" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <input type="number" name="giaMin" class="form-control rounded-pill" placeholder="Giá tối thiểu" value="@ViewBag.GiaMin" step="10000" />
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="giaMax" class="form-control rounded-pill" placeholder="Giá tối đa" value="@ViewBag.GiaMax" step="10000" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-warning rounded-pill px-4">💰 Lọc theo giá</button>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- Danh sách đĩa -->
+    @if (!Model.Any())
+    {
+        <p class="text-center text-muted">Không có đĩa nào được đăng.</p>
+    }
+    else
+    {
+        int index = 0;
+        <div class="list-group">
+            @foreach (var item in Model)
+            {
+                string bgColor = (index % 2 == 0) ? "list-group-item-light" : "list-group-item-secondary";
+                index++;
+
+                <a asp-action="Details" asp-route-id="@item.MaGuiDia"
+                   class="list-group-item list-group-item-action py-3 @bgColor">
+                    <div class="d-flex align-items-center">
+                        <img src="~/Hinh/HangHoa/@item.HinhAnh" class="rounded" alt="@item.TenDia"
+                             style="width: 220px; height: 220px; object-fit: cover; margin-right: 20px; border-radius: 10px;">
+
+                        <div class="flex-grow-1 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4 class="mb-2 text-truncate">@item.TenDia</h4>
+                                <p class="mb-1">
+                                    🛒 <strong>Tình trạng:</strong>
+                                    @{
+                                        string tinhTrangText = item.TinhTrang switch
+                                        {
+                                            0 => "Mới",
+                                            1 => "Đã qua sử dụng",
+                                            2 => "Giá trị trưng bày",
+                                            3 => "Không xác định",
+                                        };
+                                    }
+                                    @tinhTrangText
+                                </p>
+
+                                <p class="mb-0">👤 <strong>Người bán:</strong> @item.TenNguoiGui</p>
+                            </div>
+
+                            <p class="mb-2 text-danger fw-bold" style="font-size: 1.5rem; font-weight: 700; margin-left: 20px;">
+                                @String.Format("{0:N0} VNĐ", item.Gia)
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+
+</div>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<!-- CSS cải tiến -->
+<style>
+    .list-group-item {
+        transition: all 0.3s ease;
+    }
+
+        .list-group-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+    .list-group a:nth-child(odd) {
+        background-color: #f0f9f4; /* Màu xám nhạt */
+    }
+
+    .list-group a:nth-child(even) {
+        background-color: #ffffff; /* Màu trắng */
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #7ed321;
+        border-color: #7ed321;
+    }
+</style>

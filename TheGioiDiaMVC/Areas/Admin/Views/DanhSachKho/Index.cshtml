@@ -1,0 +1,108 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.HangHoa>
+@using X.PagedList.Mvc.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Quản lý tồn kho";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- #region name -->
+@if (TempData["CapNhatSoLuong"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["CapNhatSoLuong"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["XoaThanhCong"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["XoaThanhCong"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<!-- #endregion -->
+
+
+<h1 class="mb-4">Quản lý tồn kho</h1>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-primary">
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Hình</th>
+            <th>Số lượng tồn</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-light">
+                <td>@item.TenHh</td>
+                <td>
+                    <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid rounded zoom-img" width="120" height="120" />
+                </td>
+                <td>
+                    @if (item.SoLanXem == 0)
+                    {
+                        <span class="text-danger fw-bold">Hết hàng</span>
+                    }
+                    else if (item.SoLanXem < 5)
+                    {
+                        <span class="text-warning fw-bold">@item.SoLanXem (Sắp hết!)</span>
+                    }
+                    else
+                    {
+                        <span class="text-success fw-bold">@item.SoLanXem</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MaHh" class="btn btn-warning btn-sm">Cập nhật</a>
+                    
+                    @if (item.SoLanXem == 0)
+                    {
+                        <a href="@Url.Action("Delete", "DanhSachHangHoa", new { area = "Admin", id = item.MaHh })" class="btn" style="background-color: #DC3545; color: white;" onclick="return confirm('Xóa sản phẩm này?')">Xóa</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .zoom-img {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .zoom-img:hover {
+        transform: scale(4); 
+    }
+</style>

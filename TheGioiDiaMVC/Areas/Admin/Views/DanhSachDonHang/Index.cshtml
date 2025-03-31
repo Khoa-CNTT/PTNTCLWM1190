@@ -1,0 +1,97 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.HoaDon>
+@using X.PagedList.Mvc.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    ViewData["Title"] = "Danh sách đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Quản lý đơn hàng
+</h2>
+
+
+
+<table class="table table-bordered mt-3">
+    <thead class="table-primary">
+        <tr>
+            <th>Ngày đặt</th>
+            <th>Họ tên</th>
+            <th>Địa chỉ</th>
+            <th>Cách thanh toán</th>
+            <th>Ghi chú</th>
+            <th>Điện thoại</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+              <thead class="table-light">
+            <tr>
+                <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
+                <td>@item.HoTen</td>
+                <td>@item.DiaChi</td>
+                <td>@item.CachThanhToan</td>
+                <td>@item.GhiChu</td>
+                <td>@item.DienThoai</td>
+                <td>@item.MaTrangThaiNavigation.TenTrangThai</td>
+                <td>
+                    @if (item.MaTrangThai == 0 || item.MaTrangThai == 1)
+                    {
+                        <!-- Nếu đơn hàng chưa đi, hiển thị nút -->
+                        <a href="@Url.Action("CapNhatTrangThai", "DanhSachDonHang", new { id = item.MaHd, trangThai = 2 })"
+                           class="btn btn-warning btn-sm">🚚Giao đơn hàng</a>
+                    }
+                    else if (item.MaTrangThai == 2)
+                    {
+                        <!-- Nếu đơn hàng đang chờ giao, chỉ hiển thị nút Thành công -->
+                        <a href="@Url.Action("CapNhatTrangThai", "DanhSachDonHang", new { id = item.MaHd, trangThai = 3 })"
+                           class="btn btn-success btn-sm">✅Hoàn thành đơn</a>
+                    }
+                    <!-- Nếu trạng thái = 3 (Đã giao hàng) thì không hiển thị nút nào -->
+                </td>
+                <td>
+                    <a asp-action="ChiTiet"
+                       asp-route-MaHd="@item.MaHd"
+                       class="btn"
+                       style="background-color: #7ed321; color: white;">
+                        Xem chi tiết
+                    </a>
+                </td>
+            </tr>
+            </thead>
+        }
+    </tbody>
+</table>
+
+
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

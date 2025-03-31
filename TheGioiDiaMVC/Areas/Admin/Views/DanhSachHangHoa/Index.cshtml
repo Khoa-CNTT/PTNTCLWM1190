@@ -1,0 +1,128 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.ViewModels.HangHoaVM>
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!-- #region name -->
+@if (TempData["ThemThanhCong"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["ThemThanhCong"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["CapNhatThanhCong"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["CapNhatThanhCong"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["XoaThanhCong"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["XoaThanhCong"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<!-- #endregion -->
+
+
+
+<h2 class="text-center mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Quản lý danh mục
+</h2>
+<div class="d-flex justify-content-between">
+    <div>
+        <a asp-action="Loai" class="btn" style="background-color: #A259FF; color: white;">Quản lý danh mục</a>
+        <a asp-action="Loai" class="btn" style="background-color: #A259FF; color: white;">Quản lý Nhà cung cấp</a>
+    </div>
+    <a asp-action="Them" class="btn" style="background-color: #7ed321; color: white;">Thêm sản phẩm</a>
+</div>
+
+
+<div class="d-flex justify-content-center mt-3">
+    <form method="get" action="@Url.Action("Search")" class="d-flex">
+        <input type="text" name="query" class="form-control" style="width: 400px; font-size: 16px; padding: 8px 12px;" placeholder="Nhập tên sản phẩm..." value="@Context.Request.Query["query"]">
+        <button type="submit" class="btn" style="background-color: #7ed321; color: white; margin-left: 10px; padding: 8px 16px; font-size: 16px;">
+            Tìm kiếm
+        </button>
+    </form>
+</div>
+
+
+<table class="table table-bordered mt-3">
+    <thead class="table-primary">
+        <tr>
+            <th>Mã HH</th>
+            <th>Tên</th>
+            <th>Hình</th>
+            <th>Giá</th>
+            <th>Loại</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <thead class="table-light">
+            <tr>
+                <td>@item.MaHh</td>
+                <td>@item.TenHH</td>
+                <td>
+                    <img src="~/Hinh/HangHoa/@item.Hinh" class="img-fluid rounded zoom-img" width="120" height="120" />
+                </td>
+
+
+                <td>@item.DonGia.ToString("#,##0 VND")</td>
+                <td>@item.TenLoai</td>
+                <td>
+                    <a asp-action="Sua" asp-route-MaHh="@item.MaHh" class="btn" style="background-color: #7ed321; color: white;">Sửa</a>
+                    <a href="@Url.Action("Delete", "DanhSachHangHoa", new { area = "Admin", id = item.MaHh })" class="btn" style="background-color: #DC3545; color: white;" onclick="return confirm('Xóa sản phẩm này?')">Xóa</a>
+                </td>
+            </tr>
+        </thead>
+        }
+    </tbody>
+</table>
+
+
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+<style>
+.zoom-img {
+    transition: transform 0.3s ease-in-out;
+}
+
+.zoom-img:hover {
+    transform: scale(6); /* Phóng to 1.5 lần */
+}
+</style>

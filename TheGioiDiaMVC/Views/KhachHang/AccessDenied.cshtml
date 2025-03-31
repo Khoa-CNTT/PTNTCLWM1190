@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Truy cập bị hạn chế";
+}
+
+<div class="container text-center py-5">
+    <div class="card shadow-lg border-0 rounded-4 p-5 mx-auto" style="max-width: 750px;">
+        <div class="card-body">
+            <div class="mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" alt="Access Denied" width="120" height="120">
+            </div>
+            <h1 class="text-danger fw-bold">Truy cập bị hạn chế!</h1>
+            <p class="text-muted fs-5">Bạn không có quyền truy cập trang này. Vui lòng quay lại trang chính hoặc liên hệ quản trị viên.</p>
+            <div class="mt-4">
+                <a href="http://localhost:7001/Admin/DanhSachDonHang/Index" class="btn btn-lg btn-primary px-5 py-3 fw-bold">
+                    Quay lại danh sách đơn hàng
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

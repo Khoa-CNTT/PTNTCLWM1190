@@ -1,0 +1,109 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.KhachHang>
+@using X.PagedList.Mvc.Core
+
+
+@{
+    ViewData["Title"] = "Danh sách đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- #region name -->
+@if (TempData["ThemNhanSu"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["ThemNhanSu"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["SuaNhanSu"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuaNhanSu"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["XoaNhanSu"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["XoaNhanSu"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<!-- #endregion -->
+
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Quản lý nhân sự
+</h2>
+
+<p>
+    <a asp-action="Them" class="btn" style="background-color: #7ed321; color: white;">Thêm nhân sự</a>
+</p>
+
+<table class="table table-bordered mt-3">
+    <thead class="table-primary">
+        <tr>
+            <th>Tên đăng nhập</th>
+            <th>Họ tên</th>
+            <th>Địa chỉ</th>
+            <th>Điện thoại</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+             <thead class="table-light">
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.MaKh)</td>
+                <td>@Html.DisplayFor(modelItem => item.HoTen)</td>
+                <td>@Html.DisplayFor(modelItem => item.DiaChi)</td>
+                <td>@Html.DisplayFor(modelItem => item.DienThoai)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>
+                    @(item.VaiTro == 1 ? "Quản trị viên" : (item.VaiTro == 2 ? "Nhân viên" : "Khác"))
+                </td>
+
+                <td>
+                    <a asp-action="Sua" asp-route-MaKh="@item.MaKh" class="btn" style="background-color: #7ed321; color: white;">Sửa</a>
+
+                    <a href="@Url.Action("Delete", "DanhSachNhanVien", new { area = "Admin", id = item.MaKh })" class="btn" style="background-color: #DC3545; color: white;" onclick="return confirm('Xóa nhân sự này?')">Xóa</a>
+
+                </td>
+            </tr>
+            </thead>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

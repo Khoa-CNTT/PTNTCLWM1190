@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "_LayoutCustomer";
+}
+
+<!-- Single Page Header start -->
+@RenderSection("BreadCum", required: false)
+<!-- Single Page Header End -->
+
+<!-- Fruits Shop Start-->
+<div class="container-fluid fruite py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">CD LOOP</h1>
+        <div class="row g-4">
+            <div class="col-lg-12">
+                <div class="row g-4">
+                    <div class="col-xl-3">
+                        <div class="input-group w-100 mx-auto d-flex">
+                            <form name="SearchForm" asp-action="Search" asp-controller="HangHoa">
+                                <div class="input-group w-100 mx-auto d-flex">
+                                    <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="searchButton" name="query" id="searchText">
+                                    <span id="searchButton" class="input-group-text p-3" onclick="SearchForm.submit()"><i class="fa fa-search"></i></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-6"></div>
+                    <div class="col-xl-3">
+                        <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
+                            <label for="fruits">Default Sorting:</label>
+                            <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
+                                <option value="volvo">Từ A - Z</option>
+                                <option value="saab">Giá thấp đến cao</option>
+                                <option value="opel">Giá cao đến thấp</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-3">
+                        <div class="row g-4">
+
+                            @await Component.InvokeAsync("MenuLoai")
+                            <!-- Tìm kiếm theo giá -->
+                            <div class="card shadow-sm border-2 border-primary p-3 mb-4" style="max-width: 400px; margin: auto; border-radius: 15px;">
+                                <h5 class="fw-bold text-success text-center mb-3">🔍 Tìm kiếm theo giá</h5>
+                                <form asp-action="SearchGia" method="get">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <input type="number" name="giaMin" class="form-control rounded-pill px-3 text-center border border-primary"
+                                               style="width: 120px;" placeholder="Tối thiểu" value="@ViewBag.GiaMin" step="10000">
+                                        <span class="fw-bold text-primary">-</span>
+                                        <input type="number" name="giaMax" class="form-control rounded-pill px-3 text-center border border-primary"
+                                               style="width: 120px;" placeholder="Tối đa" value="@ViewBag.GiaMax" step="10000">
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold shadow">💰 Lọc</button>
+                                    </div>
+                                </form>
+                            </div>
+    
+                            <div class="container my-5 text-center">
+                                <h2 class="fw-bold text-primary">🎵 BẢN PHÁT THỬ</h2>
+                                <iframe src="https://open.spotify.com/embed/playlist/0lLgC9zfleQhs3l4CI1k8g"
+                                        width="100%" height="600"
+                                        frameborder="0"
+                                        allowtransparency="true"
+                                        allow="encrypted-media">
+                                </iframe>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="position-relative">
+                                    <img src="~/Hinh/HangHoa/ban.png" class="img-fluid w-100 rounded" alt="">
+                                    <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
+                                        <h3 class="text-secondary fw-bold">CD <br> LOOP <br> 2025</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="row g-4 justify-content-center">
+
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fruits Shop End-->

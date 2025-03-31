@@ -1,0 +1,24 @@
+﻿@model List<TheGioiDiaMVC.ViewModels.NhaCungCapVM>
+
+@{
+    ViewData["Title"] = "Danh sách Nhà Cung Cấp";
+}
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">CD LOOP – Rao Bán Ngay!</h1>
+</div>
+
+<h2 class="text-center mt-3">Danh Sách Nhà Cung Cấp</h2>
+
+<div class="row mt-4">
+    @foreach (var ncc in Model)
+    {
+        <div class="col-md-3 text-center mb-4">
+            <div class="card p-3 shadow">
+                <img src="~/Hinh/NhaCC/@ncc.Logo" class="rounded" alt="@ncc.TenNCC" style="width: 220px; height: 220px; object-fit: cover; margin-right: 20px; border-radius: 10px;">
+
+                <h5 class="mt-3">@ncc.TenNCC</h5>
+            </div>
+        </div>
+    }
+</div>

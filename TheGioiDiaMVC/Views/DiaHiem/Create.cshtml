@@ -1,0 +1,62 @@
+﻿@model TheGioiDiaMVC.ViewModels.ThemDiaHiemVM
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-4 rounded-4 border-0" style="max-width: 600px; width: 100%;">
+        <h2 class="text-center mb-4 text-primary fw-bold">Gửi Đĩa Hiếm</h2>
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label asp-for="TenDia" class="form-label fw-semibold">Tên Đĩa<sup>*</sup></label>
+                <input asp-for="TenDia" class="form-control rounded-pill" placeholder="Nhập tên đĩa" />
+                <span asp-validation-for="TenDia" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Gia" class="form-label fw-semibold">Giá (VNĐ)<sup>*</sup></label>
+                <input asp-for="Gia" type="number" class="form-control rounded-pill" placeholder="Nhập giá" />
+                <span asp-validation-for="Gia" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="MoTa" class="form-label fw-semibold">Mô Tả</label>
+                <textarea asp-for="MoTa" class="form-control" placeholder="Mô tả chi tiết" rows="6"></textarea>
+                <span asp-validation-for="MoTa" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TinhTrang" class="form-label fw-semibold">Tình Trạng<sup>*</sup></label>
+                <select asp-for="TinhTrang" class="form-control rounded-pill">
+                    <option value="" disabled selected>-- Chọn tình trạng --</option>
+                    <option value="0">Mới</option>
+                    <option value="1">Đã qua sử dụng</option>
+                    <option value="2">Giá trị trưng bày</option>
+                    <option value="3">Không xác định</option>
+                </select>
+                <span asp-validation-for="TinhTrang" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="mb-3">
+                <label asp-for="HinhAnh" class="form-label fw-semibold">Hình Ảnh Chính<sup>*</sup></label>
+                <input asp-for="HinhAnh" type="file" class="form-control rounded-pill" />
+                <span asp-validation-for="HinhAnh" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="HinhMoTa" class="form-label fw-semibold">Hình Mô Tả (Tùy Chọn)</label>
+                <input asp-for="HinhMoTa" type="file" class="form-control rounded-pill" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm">Gửi Đĩa Hiếm</button>
+            <a asp-action="Index" class="btn btn-secondary w-100 py-2 rounded-pill fw-bold mt-3">Hủy</a>
+        </form>
+    </div>
+</div>
+
+
