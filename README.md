@@ -1,6 +1,7 @@
 <div align="center">
 
 🎵 CD LOOP 🎵
+<br>
  👤 Thông tin cá nhân
 
 Họ và tên: <span style="color:blue;">Nguyễn Trúc Phương</span>  
