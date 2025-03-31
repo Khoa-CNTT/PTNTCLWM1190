@@ -1,9 +1,5 @@
 # 🎵 **CD LOOP** 🎵
 
-<p align="center">
-  <img src="https://via.placeholder.com/150" alt="CD LOOP" width="150">
-</p>
-
 ---
 
 ## 👤 Thông tin cá nhân
