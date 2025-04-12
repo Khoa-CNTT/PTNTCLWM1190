@@ -17,49 +17,62 @@
 		</ol>
 	</div>
 }
-<!-- #region name -->
-@if (TempData["ThemGioHang"] != null)
-{
-	<div class="alert alert-success text-center" role="alert">
-		@TempData["ThemGioHang"]
-	</div>
-	TempData.Remove("ThemGioHang");
+@{
+	var thongBao = Context.Request.Query["thongBao"].ToString();
+	int soLanXem = 0;
+	int.TryParse(Context.Request.Query["soLanXem"], out soLanXem);
+	var ten = Context.Request.Query["ten"].ToString();
 }
 
-@if (TempData["CartError"] != null)
+@if (thongBao == "KhongTimThay")
 {
-	<div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-		@TempData["CartError"]
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<i class="fas fa-exclamation-circle"></i> Không tìm thấy hàng hóa!
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 }
-
-@if (TempData["HetHang"] != null)
+@if (thongBao == "HetHang")
 {
-	<div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-		@TempData["HetHang"]
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<i class="fas fa-exclamation-circle"></i> Sản phẩm đã hết hàng!
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 }
-
-@if (TempData["DangKyThanhCong"] != null)
+@if (thongBao == "VuotSoLuong")
 {
-	<div class="alert alert-success text-center" role="alert">
-		@TempData["DangKyThanhCong"]
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		<i class="fas fa-exclamation-circle"></i> Chỉ còn @soLanXem sản phẩm!
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 }
-
-@if (TempData["DangNhapThanhCong"] != null)
+@if (thongBao == "ThemGioHang")
 {
-	<div class="alert alert-success text-center" role="alert">
-		@TempData["DangNhapThanhCong"]
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		<i class="fas fa-check-circle"></i> Đã thêm vào giỏ hàng!
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 }
-<!-- #endregion -->
-
-
+@if (thongBao == "HetHangg")
+{
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<i class="fas fa-exclamation-circle"></i> Sản phẩm <strong>@ten</strong> đã hết hàng hoặc không đủ số lượng!
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+@if (thongBao == "DangKyThanhCong")
+{
+	<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+		<i class="fas fa-user-check"></i> Đăng ký thành công! Xin tiếp tục đăng nhập.
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+}
+@if (thongBao == "DangNhapThanhCong")
+{
+	<div class="alert alert-success alert-dismissible fade show mt-3 text-center fw-bold shadow-sm" role="alert">
+		<i class="fas fa-check-circle me-2"></i> Đăng nhập thành công! Chào mừng bạn đến với CD LOOP.
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+	</div>
+}
 <!-- Single Page Header End -->
 @await Html.PartialAsync("ProductItem", Model)
 

@@ -6,35 +6,72 @@
     ViewData["Title"] = "Quản Lý Tin Đăng";
     Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<!-- #region name -->
-@if (TempData["AnThanhCong"] != null)
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5"
+     style="background: url('https://yourimageurl.com') no-repeat center center/cover;
+            background: linear-gradient(45deg, #A259FF, #4A00E0);">
+    <h1 class="text-center text-white display-4"
+        style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <i class="fas fa-list-alt"></i> Quản Lý Tin Đăng
+    </h1>
+    <p class="text-center text-white lead mt-3"
+       style="font-size: 1.2rem; font-style: italic;">
+        Theo dõi, chỉnh sửa và quản lý các tin rao bán của bạn dễ dàng!
+    </p>
+</div>
+<!-- Single Page Header end -->
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+
+@if (thongBao == "AnThanhCong")
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["AnThanhCong"]
+    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+        <i class="fas fa-eye-slash"></i> Tin đã được ẩn thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-@if (TempData["HienThiThanhCong"] != null)
+@if (thongBao == "HienThiThanhCong")
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["HienThiThanhCong"]
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <i class="fas fa-check-circle"></i> Tin đã được hiển thị lại thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<!-- #endregion -->
-
-
-
 <div class="container mt-5">
-    <h2 class="text-left mb-4" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
-        Tin của bạn
-    </h2>
+
+    <!-- Thông báo -->
+    @if (TempData["AnThanhCong"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["AnThanhCong"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["HienThiThanhCong"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["HienThiThanhCong"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Thanh lọc trạng thái -->
+    <div class="d-flex justify-content-center mb-4">
+        <a asp-action="QuanLyTin" asp-route-trangThai="1" class="btn btn-outline-success mx-2">
+            ✔ Đang hiển thị (@ViewBag.CountHienThi)
+        </a>
+        <a asp-action="QuanLyTin" asp-route-trangThai="0" class="btn btn-outline-warning mx-2">
+            ⏳ Chờ duyệt (@ViewBag.CountChoDuyet)
+        </a>
+        <a asp-action="QuanLyTin" asp-route-trangThai="2" class="btn btn-outline-danger mx-2">
+            ✖ Bị từ chối (@ViewBag.CountTuChoi)
+        </a>
+        <a asp-action="QuanLyTin" asp-route-trangThai="3" class="btn btn-outline-secondary mx-2">
+            🛑 Đã ẩn (Đã bán) (@ViewBag.CountDaAn)
+        </a>
+    </div>
+
 
     <div class="row">
         @if (Model != null && Model.Count > 0)
@@ -43,61 +80,34 @@
             {
                 <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
                     <a asp-action="Details" asp-route-id="@item.MaGuiDia" class="text-decoration-none text-dark">
-                        <div class="card shadow-lg" style="border-radius: 16px; transition: transform 0.2s;">
-                            <img src="~/Hinh/HangHoa/@item.HinhAnh" class="card-img-top"
-                                 style="height: 220px; object-fit: cover; border-top-left-radius: 16px; border-top-right-radius: 16px;"
-                                 alt="Ảnh đĩa">
+                        <div class="card shadow-lg rounded-4">
+                            <img src="~/Hinh/HangHoa/@item.HinhAnh" class="card-img-top rounded-top-4"
+                                 style="height: 220px; object-fit: cover;" alt="Ảnh đĩa">
                             <div class="card-body text-center">
-                                <h5 class="card-title" style="font-size: 16px; font-weight: bold;">@item.TenDia</h5>
-                                <p class="card-text" style="font-size: 14px;"><strong>Giá:</strong> @String.Format("{0:N0} VNĐ", item.Gia)</p>
-                                <p class="card-text" style="font-size: 14px; margin-bottom: 8px;">
-                                    <strong>Tình trạng:</strong>
-                                    @{
-                                        string tinhTrangText = item.TinhTrang switch
-                                        {
-                                            0 => "Mới",
-                                            1 => "Đã qua sử dụng",
-                                            2 => "Giá trị trưng bày",
-                                            3 => "Không xác định",
-                                        };
-                                    }
-                                    @tinhTrangText
-                                </p>
-
+                                <h5 class="card-title fw-bold">@item.TenDia</h5>
+                                <p class="card-text"><strong>Giá:</strong> @String.Format("{0:N0} VNĐ", item.Gia)</p>
+                                <p class="card-text"><strong>Tình trạng:</strong> @(item.TinhTrang == 0 ? "Mới" : item.TinhTrang == 1 ? "Đã qua sử dụng" : "Giá trị trưng bày")</p>
                                 <p class="card-text">
                                     <strong>Trạng thái:</strong>
-                                    @if (item.TrangThai == 1)
-                                    {
-                                        <span class="badge bg-success">✔ Đã duyệt</span>
-                                    }
-                                    else if (item.TrangThai == 2)
-                                    {
-                                        <span class="badge bg-danger">✖ Bị từ chối</span>
-                                    }
-                                    else if (item.TrangThai == 3)
-                                    {
-                                        <span class="badge bg-secondary">🛑 Đã Bán (Ẩn)</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-warning">⏳ Đang chờ duyệt</span>
-                                    }
+                                    <span class="badge @(item.TrangThai == 1 ? "bg-success" : item.TrangThai == 2 ? "bg-danger" : item.TrangThai == 3 ? "bg-secondary" : "bg-warning")">
+                                        @(item.TrangThai == 1 ? "✔ Đã duyệt" : item.TrangThai == 2 ? "✖ Bị từ chối" : item.TrangThai == 3 ? "🛑 Đã Bán (Ẩn)" : "⏳ Đang chờ duyệt")
+                                    </span>
                                 </p>
                                 <div class="d-flex justify-content-center mt-3">
                                     @if (item.TrangThai == 1)
                                     {
-                                        <a asp-action="Edit" asp-route-id="@item.MaGuiDia" class="btn btn-warning me-2" style="border-radius: 8px; font-size: 14px;">
+                                        <a asp-action="Edit" asp-route-id="@item.MaGuiDia" class="btn btn-warning me-2 rounded-3">
                                             Sửa tin
                                         </a>
                                         <form asp-action="AnTin" asp-route-id="@item.MaGuiDia" method="post" class="d-inline">
-                                            <button type="submit" class="btn btn-secondary" style="border-radius: 8px; font-size: 14px;">
+                                            <button type="submit" class="btn btn-secondary rounded-3">
                                                 Ẩn tin (Đã Bán)
                                             </button>
                                         </form>
                                     }
                                     else if (item.TrangThai == 3)
                                     {
-                                        <a asp-action="HienThiLai" asp-route-id="@item.MaGuiDia" class="btn btn-primary btn-sm mt-2">
+                                        <a asp-action="HienThiLai" asp-route-id="@item.MaGuiDia" class="btn btn-primary btn-sm mt-2 rounded-3">
                                             <i class="fas fa-eye"></i> Hiển Thị Lại
                                         </a>
                                     }
@@ -108,4 +118,9 @@
                 </div>
             }
         }
+        else
+        {
+            <p class="text-center text-muted">Không có tin đăng nào phù hợp.</p>
+        }
+    </div>
 </div>

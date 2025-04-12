@@ -1,0 +1,38 @@
+﻿@model TheGioiDiaMVC.Data.Loai
+
+@{
+    ViewData["Title"] = "Thêm loại";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<h2 class="text-center text-uppercase mb-4" style="color: #A259FF;">Thêm loại mới</h2>
+
+<form asp-action="ThemLoai" enctype="multipart/form-data" method="post" class="mx-auto" style="max-width: 600px;">
+    <div class="mb-3">
+        <label asp-for="TenLoai" class="form-label">Tên loại</label>
+        <input asp-for="TenLoai" class="form-control" />
+        <span asp-validation-for="TenLoai" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label">Mô tả</label>
+        <textarea asp-for="MoTa" class="form-control"></textarea>
+        <span asp-validation-for="MoTa" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Hình ảnh</label>
+        <input type="file" name="HinhUpload" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn" style="background-color: #7ed321; color: white; font-weight: bold;">
+        ➕ Thêm loại
+    </button>
+    <a asp-action="Loai" class="btn btn-secondary ms-2">⬅ Quay lại</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

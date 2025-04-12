@@ -20,10 +20,11 @@
                 <div class="d-flex justify-content-between flex-lg-wrap">
                     <p class="text-dark fs-5 fw-bold mb-0">@item.DonGia.ToString("#,##0 VND")</p>
 
-                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.MaHh"
+                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.MaHh" asp-route-page="@Context.Request.Query["page"]"
                        class="btn border border-secondary rounded-pill px-3 text-primary">
                         <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
                     </a>
+
                 </div>
             </div>
         </div>

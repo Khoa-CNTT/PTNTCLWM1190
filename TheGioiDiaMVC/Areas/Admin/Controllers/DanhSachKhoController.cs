@@ -52,7 +52,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             hangHoa.SoLanXem = soLuongMoi; // Cập nhật số lượng
             await db.SaveChangesAsync();
 
-            TempData["CapNhatSoLuong"] = "Cập nhật số lượng thành công!"; // Thông báo thành công
+            return RedirectToAction("Index", new { thongBao = "CapNhatSoLuong" });
             return RedirectToAction(nameof(Index));
         }
         #endregion
@@ -67,7 +67,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             {
                 db.HangHoas.Remove(product);
                 db.SaveChanges();
-                TempData["XoaThanhCong"] = "Xoá sản phẩm thành công!";
+                return RedirectToAction("Index", new { thongBao = "XoaSanPham" }); ;
             }
             return RedirectToAction("Index","DanhSachKho");
         }

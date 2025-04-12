@@ -1,0 +1,58 @@
+﻿@model TheGioiDiaMVC.ViewModels.DoiMatKhauVM
+@{
+    ViewData["Title"] = "Đổi Mật Khẩu";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-4 rounded-3" style="max-width: 500px; width: 100%;">
+
+        <p class="text-center mt-4 fw-semibold text-dark" style="font-size: 1.1rem;">
+            🔒 <span class="text-primary">Bảo mật tài khoản</span> của bạn để tận hưởng <span class="text-danger">âm nhạc</span> trọn vẹn! 🎶
+        </p>
+        <h2 class="text-center mb-3 text-danger">Đổi Mật Khẩu</h2>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label asp-for="MatKhauCu" class="form-label">Mật khẩu hiện tại</label>
+                <input asp-for="MatKhauCu" type="password" class="form-control" placeholder="Nhập mật khẩu hiện tại" />
+                <span class="text-danger" asp-validation-for="MatKhauCu"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MatKhauMoi" class="form-label">Mật khẩu mới</label>
+                <input asp-for="MatKhauMoi" type="password" class="form-control" placeholder="Nhập mật khẩu mới" />
+                <span class="text-danger" asp-validation-for="MatKhauMoi"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="XacNhanMatKhauMoi" class="form-label">Xác nhận mật khẩu mới</label>
+                <input asp-for="XacNhanMatKhauMoi" type="password" class="form-control" placeholder="Nhập lại mật khẩu mới" />
+                <span class="text-danger" asp-validation-for="XacNhanMatKhauMoi"></span>
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Đổi mật khẩu</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="HoSoAdmin" class="btn btn-primary w-100 py-2 fw-bold rounded-2">Quay lại hồ sơ</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+

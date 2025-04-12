@@ -7,32 +7,30 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<!-- #region name -->
-@if (TempData["ThemNhanSu"] != null)
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+@if (thongBao == "ThemNhanSu")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["ThemNhanSu"]
+        <i class="fas fa-check-circle"></i> Thêm nhân sự thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-
-@if (TempData["SuaNhanSu"] != null)
+@if (thongBao == "SuaNhanSu")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["SuaNhanSu"]
+        <i class="fas fa-check-circle"></i> Cập nhật nhân sự thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-
-@if (TempData["XoaNhanSu"] != null)
+@if (thongBao == "XoaNhanSu")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["XoaNhanSu"]
+        <i class="fas fa-check-circle"></i>Xoá nhân sự thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<!-- #endregion -->
-
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">

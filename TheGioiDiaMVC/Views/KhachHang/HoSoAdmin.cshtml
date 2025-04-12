@@ -1,0 +1,133 @@
+﻿@model TheGioiDiaMVC.ViewModels.HoSoVM
+@{
+    ViewData["Title"] = "Hồ Sơ Cá Nhân";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+
+@if (!string.IsNullOrEmpty(thongBao))
+{
+    <div style="position: fixed; top: 200px; right: 20px; z-index: 1055; min-width: 320px;">
+        <div class="alert alert-dismissible fade show fw-semibold shadow-lg"
+             role="alert"
+             style="background-color: #28a745; color: white; font-size: 1.05rem; padding: 1rem 1.25rem; border-radius: 0.75rem;">
+            @if (thongBao == "CapNhatHoSoThanhCong")
+            {
+                <span><i class="bi bi-check-circle-fill me-2"></i> Cập nhật hồ sơ thành công!</span>
+            }
+            else if (thongBao == "XoaThanhCong")
+            {
+                <span><i class="bi bi-trash-fill me-2"></i> Xóa dữ liệu thành công!</span>
+            }
+            else if (thongBao == "DoiMatKhauThanhCong")
+            {
+                <span><i class="fas fa-lock me-2"></i> Đổi mật khẩu thành công!</span>
+            }
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
+
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5"
+     style="background: linear-gradient(135deg, #7F00FF, #E100FF); min-height: 300px;">
+    <div class="text-center">
+        <h1 class="text-white display-3 mb-3"
+            style="text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.6); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <i class="fas fa-user-circle me-2"></i> Hồ Sơ Cá Nhân
+        </h1>
+        <p class="text-white lead"
+           style="font-size: 1.35rem; font-style: italic;">
+            Cập nhật thông tin cá nhân để quản lý hệ thống dễ dàng và bảo mật hơn.
+        </p>
+    </div>
+</div>
+<!-- Single Page Header end -->
+<!-- Form nhập hồ sơ -->
+<div class="d-flex justify-content-center py-5 bg-light">
+    <div class="card shadow-lg p-4 rounded-4 border-0 bg-white" style="max-width: 650px; width: 100%;">
+        <h2 class="text-center text-primary fw-bold mb-4">Hồ Sơ Cá Nhân</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken() <!-- Bảo mật CSRF -->
+            @Html.ValidationSummary(true, "", new { @class = "text-danger fw-semibold mb-3" })
+
+            <div class="mb-3">
+                <label asp-for="HoTen" class="form-label fw-semibold text-dark">Họ Tên<sup class="text-danger">*</sup></label>
+                <input asp-for="HoTen" class="form-control rounded-3 border-secondary" placeholder="Nhập họ tên" />
+                <span class="text-danger small" asp-validation-for="HoTen"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-semibold text-dark">Email<sup class="text-danger">*</sup></label>
+                <input asp-for="Email" type="email" class="form-control rounded-3 border-secondary" placeholder="Nhập email" id="email" />
+                <span class="text-danger small" asp-validation-for="Email"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NgaySinh" class="form-label fw-semibold text-dark">Ngày Sinh</label>
+                <input asp-for="NgaySinh" type="date" class="form-control rounded-3 border-secondary" />
+                <span class="text-danger small" asp-validation-for="NgaySinh"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DienThoai" class="form-label fw-semibold text-dark">Điện Thoại<sup class="text-danger">*</sup></label>
+                <input asp-for="DienThoai" type="tel" class="form-control rounded-3 border-secondary" placeholder="Nhập số điện thoại" id="dienThoai" />
+                <span class="text-danger small" asp-validation-for="DienThoai"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DiaChi" class="form-label fw-semibold text-dark">Địa Chỉ<sup class="text-danger">*</sup></label>
+                <input asp-for="DiaChi" class="form-control rounded-3 border-secondary" placeholder="Nhập địa chỉ" />
+                <span class="text-danger small" asp-validation-for="DiaChi"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-dark">Ảnh đại diện</label>
+                <input type="file" name="Hinh" class="form-control rounded-3 border-secondary" />
+            </div>
+
+            <div class="mb-3 d-none" id="passwordField">
+                <label class="form-label fw-semibold text-dark">Mật khẩu hiện tại (cần khi thay đổi Email/SĐT)</label>
+                <input type="password" name="MatKhauHienTai" class="form-control rounded-3 border-warning" placeholder="Nhập mật khẩu hiện tại" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 rounded-3 fw-bold py-2 mb-2">
+                <i class="bi bi-save me-1"></i> Lưu Thay Đổi
+            </button>
+
+            <a asp-action="DoiMatKhauAdmin" class="btn btn-warning text-white w-100 rounded-3 fw-bold py-2 mb-2">
+                <i class="bi bi-lock me-1"></i> Đổi Mật Khẩu
+            </a>
+
+            <a asp-action="DangXuat" class="btn btn-danger w-100 rounded-3 fw-bold py-2">
+                <i class="bi bi-box-arrow-right me-1"></i> Đăng Xuất
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const email = document.getElementById("email");
+            const dienThoai = document.getElementById("dienThoai");
+            const passwordField = document.getElementById("passwordField");
+
+            function checkPasswordField() {
+                if (email.value !== "@Model.Email" || dienThoai.value !== "@Model.DienThoai") {
+                    passwordField.classList.remove("d-none");
+                } else {
+                    passwordField.classList.add("d-none");
+                }
+            }
+
+            email.addEventListener("input", checkPasswordField);
+            dienThoai.addEventListener("input", checkPasswordField);
+        });
+    </script>
+}

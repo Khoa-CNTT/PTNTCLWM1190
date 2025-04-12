@@ -1,0 +1,100 @@
+﻿@model TheGioiDiaMVC.ViewModels.LienHeVM
+
+<br />
+<br />
+<br />
+<br/>
+
+@if (Context.Request.Query["thongBao"] == "GuiPhanHoiThanhCong")
+{
+    <div class="toast-container position-fixed top-0 end-0 p-4" style="z-index: 1055;">
+        <div class="toast show align-items-center text-white border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true"
+             style="background: linear-gradient(135deg, #28a745, #218838); min-width: 320px; font-size: 1.1rem;">
+            <div class="d-flex">
+                <div class="toast-body fw-semibold">
+                    <i class="fas fa-check-circle me-2"></i> Cảm ơn bạn đã gửi phản hồi!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Đóng"></button>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="container-fluid contact py-5">
+    <div class="container py-5">
+        <div class="p-5 bg-light rounded">
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="text-center mx-auto" style="max-width: 700px;">
+                        <h1 class="text-primary">Liên hệ với chúng tôi</h1>
+                        <p class="mb-4 fs-6">
+                            Nếu bạn gặp sự cố khi truy cập, cần được hỗ trợ hoặc có góp ý (kể cả những đánh giá chưa hài lòng), hãy để lại tin nhắn cho chúng tôi.
+                            <br />
+                            <strong>Chúng tôi luôn lắng nghe và trân trọng mọi phản hồi để cải thiện dịch vụ tốt hơn mỗi ngày.</strong>
+                        </p>
+
+
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <form method="post" asp-action="Submit" asp-controller="LienHe">
+                        <input type="hidden" name="MaLH" value="@Model?.MaLH" />
+                        <input type="text" name="HoTen" class="w-100 form-control border-0 py-3 mb-4" placeholder="Tên của bạn" value="@Model?.HoTen">
+                        <input type="email" name="Email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Email của bạn" value="@Model?.Email">
+                        <textarea name="NoiDung" class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Phản hồi của bạn">@Model?.NoiDung</textarea>
+                        <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary" type="submit">Gửi phản hồi</button>
+                    </form>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="d-flex p-4 rounded mb-4 bg-white">
+                        <i class="fas fa-map-marker-alt fa-2x text-primary me-4"></i>
+                        <div>
+                            <h4>Địa chỉ</h4>
+                            <p class="mb-2">248 Cách Mạng Tháng 8 - Đà Nẵng</p>
+                        </div>
+                    </div>
+                    <div class="d-flex p-4 rounded mb-4 bg-white">
+                        <i class="fas fa-envelope fa-2x text-primary me-4"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p class="mb-2">cdloop1.com</p>
+                        </div>
+                    </div>
+                    <div class="d-flex p-4 rounded bg-white">
+                        <i class="fa fa-phone-alt fa-2x text-primary me-4"></i>
+                        <div>
+                            <h4>Điện thoại</h4>
+                            <p class="mb-2">0789 432 225</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="h-100 rounded">
+                        <iframe class="rounded w-100" style="height: 400px;"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.760401232097!2d108.20389331535!3d16.06477948888013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219b6b5a1f7d7%3A0x3a3d1e1a1e1a1e1a!2s248%2F24%20C%C3%A1ch%20M%E1%BA%A1ng%20Th%C3%A1ng%208%2C%20Khu%C3%AA%20Trung%2C%20C%E1%BA%A9m%20L%E1%BB%87%2C%20%C4%90%C3%A0%20N%E1%BA%B5ng%20550000%2C%20Vietnam!5e0!3m2!1sen!2s!4v1616581234567!5m2!1sen!2s"
+                                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

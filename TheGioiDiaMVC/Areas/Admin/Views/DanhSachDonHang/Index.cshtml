@@ -2,7 +2,6 @@
 @using X.PagedList.Mvc.Core
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-
 @{
     ViewData["Title"] = "Danh sách đơn hàng";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
@@ -10,8 +9,6 @@
 <h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
     Quản lý đơn hàng
 </h2>
-
-
 
 <table class="table table-bordered mt-3">
     <thead class="table-primary">
@@ -29,9 +26,10 @@
     </thead>
     <tbody>
         @foreach (var item in Model)
-        {
-              <thead class="table-light">
-            <tr>
+        {     
+            var rowClass = item.MaTrangThai == -1 ? "table-danger" : (item.MaTrangThai == 3 ? "table-success" : "table-light");
+
+            <tr class="@rowClass">
                 <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
                 <td>@item.HoTen</td>
                 <td>@item.DiaChi</td>
@@ -46,12 +44,12 @@
                         <a href="@Url.Action("CapNhatTrangThai", "DanhSachDonHang", new { id = item.MaHd, trangThai = 2 })"
                            class="btn btn-warning btn-sm">🚚Giao đơn hàng</a>
                     }
-                    else if (item.MaTrangThai == 2)
+@*                     else if (item.MaTrangThai == 2)
                     {
                         <!-- Nếu đơn hàng đang chờ giao, chỉ hiển thị nút Thành công -->
                         <a href="@Url.Action("CapNhatTrangThai", "DanhSachDonHang", new { id = item.MaHd, trangThai = 3 })"
                            class="btn btn-success btn-sm">✅Hoàn thành đơn</a>
-                    }
+                    } *@
                     <!-- Nếu trạng thái = 3 (Đã giao hàng) thì không hiển thị nút nào -->
                 </td>
                 <td>
@@ -63,11 +61,9 @@
                     </a>
                 </td>
             </tr>
-            </thead>
         }
     </tbody>
 </table>
-
 
 <div class="d-flex justify-content-center mt-4">
     <nav>

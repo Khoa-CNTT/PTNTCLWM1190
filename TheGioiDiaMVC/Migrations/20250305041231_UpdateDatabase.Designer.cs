@@ -335,39 +335,6 @@ namespace TheGioiDiaMVC.Migrations
                     b.ToTable("HoaDon", (string)null);
                 });
 
-            modelBuilder.Entity("TheGioiDiaMVC.Data.HoiDap", b =>
-                {
-                    b.Property<int>("MaHd")
-                        .HasColumnType("int")
-                        .HasColumnName("MaHD");
-
-                    b.Property<string>("CauHoi")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("MaNv")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("MaNV");
-
-                    b.Property<DateOnly>("NgayDua")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<string>("TraLoi")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("MaHd");
-
-                    b.HasIndex("MaNv");
-
-                    b.ToTable("HoiDap", (string)null);
-                });
 
             modelBuilder.Entity("TheGioiDiaMVC.Data.KhachHang", b =>
                 {
@@ -850,17 +817,7 @@ namespace TheGioiDiaMVC.Migrations
                     b.Navigation("MaTrangThaiNavigation");
                 });
 
-            modelBuilder.Entity("TheGioiDiaMVC.Data.HoiDap", b =>
-                {
-                    b.HasOne("TheGioiDiaMVC.Data.NhanVien", "MaNvNavigation")
-                        .WithMany("HoiDaps")
-                        .HasForeignKey("MaNv")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_HoiDap_NhanVien");
-
-                    b.Navigation("MaNvNavigation");
-                });
+           
 
             modelBuilder.Entity("TheGioiDiaMVC.Data.PhanCong", b =>
                 {
@@ -955,16 +912,7 @@ namespace TheGioiDiaMVC.Migrations
                     b.Navigation("HangHoas");
                 });
 
-            modelBuilder.Entity("TheGioiDiaMVC.Data.NhanVien", b =>
-                {
-                    b.Navigation("ChuDes");
 
-                    b.Navigation("HoaDons");
-
-                    b.Navigation("HoiDaps");
-
-                    b.Navigation("PhanCongs");
-                });
 
             modelBuilder.Entity("TheGioiDiaMVC.Data.PhongBan", b =>
                 {

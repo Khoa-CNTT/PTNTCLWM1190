@@ -1,0 +1,58 @@
+﻿@model TheGioiDiaMVC.ViewModels.NhaCungCapVM
+
+@{
+    ViewData["Title"] = "Chi tiết Nhà cung cấp";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+
+<h2 class="text-center mb-5" style="color: #A259FF; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 40px;">
+    📦 Thông tin chi tiết nhà cung cấp
+</h2>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg p-5 border-0" style="border-radius: 25px;">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                        <img src="~/Hinh/NhaCC/@Model.Logo"
+                             alt="@Model.TenNCC"
+                             style="width: 100%; max-width: 300px; height: 300px; object-fit: cover; border-radius: 20px; border: 6px solid #7ED321;" />
+                        <h3 class="mt-4" style="color: #A259FF; font-weight: bold;">@Model.TenNCC</h3>
+                    </div>
+
+                    <div class="col-md-8" style="font-family: 'Poppins', sans-serif; font-size: 32px; line-height: 2.2;">
+                        <dl class="row">
+                            <dt class="col-sm-4 fw-bold text-end">👤 Người liên lạc:</dt>
+                            <dd class="col-sm-8 fw-semibold">@Model.NguoLienLac</dd>
+
+                            <dt class="col-sm-4 fw-bold text-end">📧 Email:</dt>
+                            <dd class="col-sm-8 fw-semibold">@Model.Email</dd>
+
+                            <dt class="col-sm-4 fw-bold text-end">📞 Điện thoại:</dt>
+                            <dd class="col-sm-8 fw-semibold">@Model.DienThoai</dd>
+
+                            <dt class="col-sm-4 fw-bold text-end">📍 Địa chỉ:</dt>
+                            <dd class="col-sm-8 fw-semibold">@Model.DiaChi</dd>
+
+                            <dt class="col-sm-4 fw-bold text-end">📝 Mô tả:</dt>
+                            <dd class="col-sm-8 fw-semibold">@Model.MoTa</dd>
+                        </dl>
+                    </div>
+
+                </div>
+
+                <div class="text-center mt-5">
+                    <a href="http://localhost:7001/Admin/DanhSachHangHoa/NhaCungCap"
+                       class="btn px-5 py-3 fs-5"
+                       style="background-color: #7ED321; color: white; border-radius: 12px;">
+                        ← Quay lại danh sách
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

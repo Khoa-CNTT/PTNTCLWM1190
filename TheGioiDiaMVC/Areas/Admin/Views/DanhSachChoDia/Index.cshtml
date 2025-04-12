@@ -4,6 +4,32 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+@if (thongBao == "DuyetThanhCong")
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> Duyệt tin thành công!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (thongBao == "TuChoiDuyet")
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> Đã từ chối duyệt tin này!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (thongBao == "AnTinThanhCong")
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> Ẩn tin này thành công !
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
     Quản lý Rao tin CD
 </h2>

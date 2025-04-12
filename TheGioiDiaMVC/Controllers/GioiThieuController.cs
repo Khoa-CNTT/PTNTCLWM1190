@@ -2,7 +2,7 @@
 
 namespace TheGioiDiaMVC.Controllers
 {
-    public class TrangChuController : Controller
+    public class GioiThieuController : Controller
     {
         public IActionResult Index()
         {

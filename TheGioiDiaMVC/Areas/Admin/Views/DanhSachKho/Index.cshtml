@@ -6,22 +6,23 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<!-- #region name -->
-@if (TempData["CapNhatSoLuong"] != null)
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+@if (thongBao == "CapNhatSoLuong")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["CapNhatSoLuong"]
+        <i class="fas fa-check-circle"></i> Cập nhật số lượng thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-@if (TempData["XoaThanhCong"] != null)
+@if (thongBao == "XoaSanPham")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["XoaThanhCong"]
+        <i class="fas fa-check-circle"></i> Xoá sản phẩm thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<!-- #endregion -->
 
 
 <h1 class="mb-4">Quản lý tồn kho</h1>

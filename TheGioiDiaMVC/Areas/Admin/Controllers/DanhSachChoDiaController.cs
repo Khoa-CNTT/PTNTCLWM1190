@@ -51,6 +51,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             {
                 dia.TrangThai = 1; // Chuyển sang Đã Duyệt
                 db.SaveChanges();
+                return RedirectToAction("Index", new { thongBao = "DuyetThanhCong" });
             }
             return RedirectToAction("Index");
         }
@@ -65,12 +66,13 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             {
                 dia.TrangThai = 2; // Chuyển sang Từ Chối
                 db.SaveChanges();
+                return RedirectToAction("Index", new { thongBao = "TuChoiDuyet" });
             }
             return RedirectToAction("Index");
         }
         #endregion
 
-        #region ẩn sản phẩm
+        #region ẩn tin
         [HttpPost]
         public IActionResult AnSanPham(int id)
         {
@@ -79,6 +81,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             {
                 dia.TrangThai = 3; // Chuyển sang Đã Bán (Ẩn)
                 db.SaveChanges();
+                return RedirectToAction("Index", new { thongBao = "AnTinThanhCong" });
             }
             return RedirectToAction("Index");
         }

@@ -75,19 +75,6 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
         }
         #endregion
 
-        #region Danh sách Loại
-        public IActionResult Loai(int? page)
-        {
-            int pageSize = 6;
-            int pageNumber = page ?? 1;
-
-            var lo = db.Loais
-                .OrderByDescending(lo => lo.MaLoai)
-                .ToPagedList(pageNumber, pageSize);
-
-            return View(lo);
-        }
-        #endregion
 
 
         #region Thêm sản phẩm
@@ -126,8 +113,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
                 db.HangHoas.Add(hh);
                 db.SaveChanges();
 
-                TempData["ThemThanhCong"] = "Thêm sản phẩm thành công!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { thongBao = "ThemThanhCong" });
             }
             catch (Exception ex)
             {
@@ -171,8 +157,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             {
                 db.Entry(existingHangHoa).CurrentValues.SetValues(HangHoa);
                 db.SaveChanges();
-                TempData["CapNhatThanhCong"] = "Cập nhật sản phẩm thành công!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { thongBao = "CapNhatThanhCong" });
             }
             else
             {
@@ -182,18 +167,257 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
         }
         #endregion
 
-        #region xoá sản phẩm
+        #region Xoá sản phẩm
         public IActionResult Delete(int id)
         {
             var product = db.HangHoas.Find(id);
+
             if (product != null)
             {
+                var isInOrder = db.ChiTietHds.Any(c => c.MaHh == id);
+                if (isInOrder)
+                {
+                    // Trả về với thông báo lỗi
+                    return RedirectToAction("Index", new { thongBao = "XoaThatBai" });
+                }
+
                 db.HangHoas.Remove(product);
                 db.SaveChanges();
-                TempData["XoaThanhCong"] = "Xoá sản phẩm thành công!";
+                return RedirectToAction("Index", new { thongBao = "XoaThanhCong" });
             }
+
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #region Danh sách Loại ,Thêm Loại ,Sửa Loại ,Xoá Loại
+        public IActionResult Loai(int? page)
+        {
+            int pageSize = 6;
+            int pageNumber = page ?? 1;
+
+            var lo = db.Loais
+                .OrderBy(lo => lo.MaLoai)
+                .ToPagedList(pageNumber, pageSize);
+
+            return View(lo);
+        }
+
+        //THÊM LOẠI
+        [HttpGet]
+        public IActionResult ThemLoai()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ThemLoai(Loai loai, IFormFile? HinhUpload)
+        {
+            if (ModelState.IsValid)
+            {
+                if (HinhUpload != null && HinhUpload.Length > 0)
+                {
+                    var fileName = Path.GetFileName(HinhUpload.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Hinh/Loai", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        HinhUpload.CopyTo(stream);
+                    }
+
+                    loai.Hinh = fileName;
+                }
+
+                db.Loais.Add(loai);
+                db.SaveChanges();
+
+                TempData["ThongBao"] = "Thêm loại thành công!";
+                return RedirectToAction("Loai","DanhSachHangHoa");
+            }
+
+            return View(loai);
+        }
+        //SỬA LOẠI
+        [HttpGet]
+        public IActionResult SuaLoai(int id)
+        {
+            var loai = db.Loais.Find(id);
+            if (loai == null)
+            {
+                return NotFound();
+            }
+
+            return View(loai);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SuaLoai(Loai loai, IFormFile? HinhUpload)
+        {
+            if (ModelState.IsValid)
+            {
+                var loaiUpdate = db.Loais.Find(loai.MaLoai);
+                if (loaiUpdate == null)
+                {
+                    return NotFound();
+                }
+
+                loaiUpdate.TenLoai = loai.TenLoai;
+
+                if (HinhUpload != null && HinhUpload.Length > 0)
+                {
+                    var fileName = Path.GetFileName(HinhUpload.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Hinh/Loai", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        HinhUpload.CopyTo(stream);
+                    }
+
+                    loaiUpdate.Hinh = fileName;
+                }
+
+                db.SaveChanges();
+                TempData["ThongBao"] = "Cập nhật loại thành công!";
+                return RedirectToAction("Loai");
+            }
+
+            return View(loai);
+        }
+
+
+        //XOÁ LOẠI
+        public IActionResult XoaLoai(int id)
+        {
+            var loai = db.Loais.Find(id);
+
+            if (loai != null)
+            {
+                var isInUse = db.HangHoas.Any(h => h.MaLoai == id);
+                if (isInUse)
+                {
+                    return RedirectToAction("Loai", new { thongBao = "XoaThatBai" });
+                }
+
+                db.Loais.Remove(loai);
+                db.SaveChanges();
+                return RedirectToAction("Loai", new { thongBao = "XoaThanhCong" });
+            }
+
+            return RedirectToAction("Loai");
+        }
+
+        #endregion
+
+
+        #region Danh sách Nhà cung cấp ,chi tiết ,thêm , xoá
+        public IActionResult NhaCungCap()
+        {
+            var nhaCungCaps = db.NhaCungCaps
+                .Select(ncc => new NhaCungCapVM
+                {
+                    MaNCC = ncc.MaNcc,
+                    TenNCC = ncc.TenCongTy,
+                    Logo = ncc.Logo
+                })
+                .ToList();
+
+            return View(nhaCungCaps);
+        }
+
+        //THÔNG TIN NHÀ CUNG CẤP
+        public IActionResult ChiTietNhaCungCap(string maNCC)
+        {
+            var ncc = db.NhaCungCaps
+                .Where(n => n.MaNcc == maNCC)
+                .Select(n => new NhaCungCapVM
+                {
+                    MaNCC = n.MaNcc,
+                    TenNCC = n.TenCongTy,
+                    Logo = n.Logo,
+                    NguoLienLac = n.NguoiLienLac,
+                    Email = n.Email,
+                    DienThoai = n.DienThoai,
+                    DiaChi = n.DiaChi,
+                    MoTa = n.MoTa
+                })
+                .FirstOrDefault();
+
+            if (ncc == null)
+            {
+                return NotFound();
+            }
+
+            return View(ncc);
+        }
+        //THÊM NHÀ CUNG CẤP
+        [HttpGet]
+        public IActionResult ThemNhaCungCap()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ThemNhaCungCap(NhaCungCap ncc, IFormFile? LogoUpload)
+        {
+            if (ModelState.IsValid)
+            {
+                if (db.NhaCungCaps.Any(x => x.MaNcc == ncc.MaNcc))
+                {
+                    ModelState.AddModelError("MaNcc", "Mã nhà cung cấp đã tồn tại.");
+                    return View(ncc);
+                }
+
+                if (LogoUpload != null && LogoUpload.Length > 0)
+                {
+                    var fileName = Path.GetFileName(LogoUpload.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Hinh/NhaCungCap", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        LogoUpload.CopyTo(stream);
+                    }
+
+                    ncc.Logo = fileName;
+                }
+
+                if (string.IsNullOrEmpty(ncc.Logo))
+                {
+                    ncc.Logo = "default-logo.png";
+                }
+
+                db.NhaCungCaps.Add(ncc);
+                db.SaveChanges();
+
+                TempData["ThongBao"] = "Thêm nhà cung cấp thành công!";
+                return RedirectToAction("NhaCungCap");
+            }
+
+            return View(ncc);
+        }
+        //XOÁ NHÀ CUNG CẤP
+        public IActionResult XoaNhaCungCap(string id)
+        {
+            var ncc = db.NhaCungCaps.Find(id);
+
+            if (ncc != null)
+            {
+                var isInUse = db.HangHoas.Any(h => h.MaNcc == id);
+                if (isInUse)
+                {
+                    return RedirectToAction("NhaCungCap", new { thongBao = "XoaThatBai" });
+                }
+
+                db.NhaCungCaps.Remove(ncc);
+                db.SaveChanges();
+                return RedirectToAction("NhaCungCap", new { thongBao = "XoaThanhCong" });
+            }
+
+            return RedirectToAction("NhaCungCap");
+        }
+
         #endregion
     }
 }

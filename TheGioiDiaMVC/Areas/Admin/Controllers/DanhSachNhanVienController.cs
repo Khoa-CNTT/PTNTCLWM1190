@@ -52,7 +52,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
                     kh.MatKhau = kh.MatKhau.ToMd5Hash(kh.RandomKey);
                     db.KhachHangs.Add(kh);
                     db.SaveChanges();
-                    TempData["ThemNhanSu"] = "Thêm nhân sự thành công!";
+                    return RedirectToAction("Index", new { thongBao = "ThemNhanSu" });
 
                     return RedirectToAction("Index");
                 }
@@ -114,7 +114,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
 
                 db.Entry(kh).State = EntityState.Modified;
                 db.SaveChanges();
-                TempData["SuaNhanSu"] = "Cập nhật nhân sự thành công!";
+                return RedirectToAction("Index", new { thongBao = "SuaNhanSu" });
 
                 return RedirectToAction("Index");
             }
@@ -131,7 +131,7 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             {
                 db.KhachHangs.Remove(nv);
                 db.SaveChanges();
-                TempData["XoaNhanSu"] = "Xoá nhân sự thành công!";
+                return RedirectToAction("Index", new { thongBao = "XoaNhanSu" });
             }
             return RedirectToAction("Index");
         }

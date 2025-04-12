@@ -24,8 +24,6 @@ public partial class TheGioiDiaContext : DbContext
 
     public virtual DbSet<HoaDon> HoaDons { get; set; }
 
-    public virtual DbSet<HoiDap> HoiDaps { get; set; }
-
     public virtual DbSet<KhachHang> KhachHangs { get; set; }
 
     public virtual DbSet<Loai> Loais { get; set; }

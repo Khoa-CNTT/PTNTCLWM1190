@@ -1,102 +1,126 @@
-﻿
+﻿@model TheGioiDiaMVC.Areas.Admin.ViewModels.ThongKeVM
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Thống kê hôm nay";
+    var today = DateTime.Now.ToString("dd/MM/yyyy");
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+<div class="container mt-5">
+    <h2 class="text-center mb-5 fw-bold text-primary">📊 Thống kê ngày @today</h2>
 
-<div class="container-fluid">
-    <h1 class="mb-4">📊 Dashboard</h1>
+    <!-- Hôm nay -->
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded-4" style="background-color: #f3e8ff;">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold" style="color: #48c78e;">💰 Doanh thu hôm nay</h5>
+                    <p class="display-5 fw-bold text-dark">@Model.DoanhThuHomNay.ToString("N0") VNĐ</p>
+                </div>
+            </div>
+        </div>
 
-    <!-- Row 1: Cards Summary -->
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded-4" style="background-color: #f3e8ff;">
                 <div class="card-body text-center">
-                    <i class="fas fa-box fa-3x text-primary"></i>
-                    <h5 class="mt-2">Tổng sản phẩm</h5>
-                    <h3>40</h3>
+                    <h5 class="card-title fw-semibold" style="color: #48c78e;">📦 Đơn hoàn thành hôm nay</h5>
+                    <p class="display-5 fw-bold text-dark">@Model.SoDonHoanThanhHomNay</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
+
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded-4" style="background-color: #f3e8ff;">
                 <div class="card-body text-center">
-                    <i class="fas fa-shopping-cart fa-3x text-success"></i>
-                    <h5 class="mt-2">Đơn hàng hôm nay</h5>
-                    <h3>8</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <i class="fas fa-users fa-3x text-warning"></i>
-                    <h5 class="mt-2">Khách hàng mới</h5>
-                    <h3>10</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <i class="fas fa-dollar-sign fa-3x text-danger"></i>
-                    <h5 class="mt-2">Doanh thu hôm nay</h5>
-                    <h3>$5,200</h3>
+                    <h5 class="card-title fw-semibold" style="color: #48c78e;">🛒 Sản phẩm bán ra hôm nay</h5>
+                    <p class="display-5 fw-bold text-dark">@Model.SoLuongSanPhamBanHomNay</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Row 2: Charts -->
-    <div class="row mt-4">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h5>📈 Doanh thu tháng</h5>
-                    <canvas id="revenueChart"></canvas>
-                </div>
-            </div>
-        </div>
+    <hr class="my-5" />
+
+    <!-- Thống kê tháng -->
+    <h3 class="text-center mb-4 fw-bold text-primary">📆 Thống kê tháng @DateTime.Now.ToString("MM/yyyy")</h3>
+
+    <div class="row g-4 justify-content-center">
         <div class="col-md-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h5>🛒 Đơn hàng theo trạng thái</h5>
-                    <canvas id="ordersChart"></canvas>
+            <div class="card shadow-lg border-0 rounded-4" style="background-color: #f3e8ff;">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold" style="color: #48c78e;">💰 Doanh thu tháng</h5>
+                    <p class="display-5 fw-bold text-dark">@Model.DoanhThuThangNay.ToString("N0") VNĐ</p>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded-4" style="background-color: #f3e8ff;">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold" style="color: #48c78e;">📦 Đơn hoàn thành tháng</h5>
+                    <p class="display-5 fw-bold text-dark">@Model.SoDonHoanThanhThangNay</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0 rounded-4" style="background-color: #f3e8ff;">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-semibold" style="color: #48c78e;">🛒 Sản phẩm bán tháng</h5>
+                    <p class="display-5 fw-bold text-dark">@Model.SoLuongSanPhamBanThangNay</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <!-- Tổng hợp theo tháng -->
+    <h3 class="text-center mb-4 fw-bold text-primary">📊 Tổng hợp theo tháng</h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle shadow-sm rounded-3 overflow-hidden">
+            <thead style="background-color: #48c78e; color: white;">
+                <tr>
+                    <th>Tháng</th>
+                    <th>Đơn hoàn thành</th>
+                    <th>Sản phẩm đã bán</th>
+                    <th>Doanh thu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ThongKeTheoThang)
+                {
+                    <tr>
+                        <td><strong>@item.Thang/@item.Nam</strong></td>
+                        <td>@item.SoDonHoanThanh</td>
+                        <td>@item.SoLuongSanPhamBan</td>
+                        <td class="fw-semibold text-success">@item.DoanhThu.ToString("N0") VNĐ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <hr class="my-5" />
+
+    <!-- Top sản phẩm -->
+    <h3 class="text-center mb-4 fw-bold text-danger">🔥 Top 5 sản phẩm bán chạy nhất</h3>
+
+    <div class="d-flex flex-wrap justify-content-center gap-4">
+        @for (int i = 0; i < Model.TopSanPhamBanChay.Count; i++)
+        {
+            var sp = Model.TopSanPhamBanChay[i];
+            <div class="card shadow border-0 rounded-4" style="width: 220px; background-color: #f3e8ff;">
+                <div class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">
+                    #@((i + 1)) 🔥
+                </div>
+                <img src="@Url.Content("~/Hinh/HangHoa/" + sp.HinhAnh)" class="card-img-top rounded-top-4" alt="@sp.TenSp" style="height: 200px; object-fit: cover;">
+                <div class="card-body text-center">
+                    <h6 class="card-title text-truncate" title="@sp.TenSp">@sp.TenSp</h6>
+                    <p class="card-text mb-0">Đã bán: <span class="fw-bold text-success">@sp.TongSoLuongBan</span></p>
+                </div>
+            </div>
+        }
     </div>
 </div>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx1 = document.getElementById('revenueChart').getContext('2d');
-        var revenueChart = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Doanh thu ($)',
-                    data: [3000, 4000, 3500, 5000, 4500, 5200],
-                    borderColor: 'blue',
-                    borderWidth: 2,
-                    fill: false
-                }]
-            }
-        });
-
-        var ctx2 = document.getElementById('ordersChart').getContext('2d');
-        var ordersChart = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Hoàn thành', 'Chờ xử lý', 'Hủy'],
-                datasets: [{
-                    data: [60, 30, 10],
-                    backgroundColor: ['green', 'orange', 'red']
-                }]
-            }
-        });
-    </script>
-}

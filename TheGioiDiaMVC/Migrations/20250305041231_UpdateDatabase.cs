@@ -75,11 +75,6 @@ namespace TheGioiDiaMVC.Migrations
                 column: "MaTrangThai");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HoiDap_MaNV",
-                table: "HoiDap",
-                column: "MaNV");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PhanCong_MaNV",
                 table: "PhanCong",
                 column: "MaNV");

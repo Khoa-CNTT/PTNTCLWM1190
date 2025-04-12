@@ -198,8 +198,7 @@ namespace TheGioiDiaMVC.Controllers
             var maKH = HttpContext.User.Claims.SingleOrDefault(c => c.Type == MySetting.CLAIM_CUSTOMERID)?.Value;
             if (string.IsNullOrEmpty(maKH))
             {
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập để gửi đĩa hiếm.";
-                return RedirectToAction("DangNhap", "KhachHang");
+                return RedirectToAction("DangNhap", "KhachHang", new { thongBao = "CanDangNhap" });
             }
 
             string uniqueFileName = null;
@@ -244,29 +243,33 @@ namespace TheGioiDiaMVC.Controllers
 
             db.GuiDiaHiems.Add(guiDia);
             await db.SaveChangesAsync();
-            TempData["ThemTin"] = "Thêm tin rao CD thành công! Đĩa của bạn đang chờ duyệt.";
+            return RedirectToAction("Index", "DiaHiem", new { thongBao = "ThemTinThanhCong" });
 
-            return RedirectToAction("Index", "DiaHiem");
         }
         #endregion
 
 
         #region Quản lý tin
         [Authorize]
-        public IActionResult QuanLyTin(int? page)
+        public IActionResult QuanLyTin(int? page, int? trangThai)
         {
             // Lấy MaKH từ Claims (không dùng Session)
             var maKH = HttpContext.User.Claims.SingleOrDefault(c => c.Type == MySetting.CLAIM_CUSTOMERID)?.Value;
             if (string.IsNullOrEmpty(maKH))
             {
-                return RedirectToAction("DangNhap", "KhachHang"); 
+                return RedirectToAction("DangNhap", "KhachHang");
             }
 
             int pageSize = 7;
             int pageNumber = page ?? 1;
 
-            var gd = db.GuiDiaHiems
-                .Where(g => g.MaKH == maKH) 
+            if (!trangThai.HasValue)
+            {
+                trangThai = 1;
+            }
+
+            var dsTin = db.GuiDiaHiems
+                .Where(g => g.MaKH == maKH) // Lọc theo khách hàng
                 .Select(g => new DuyetDiaVM
                 {
                     MaGuiDia = g.MaGuiDia,
@@ -274,14 +277,26 @@ namespace TheGioiDiaMVC.Controllers
                     Gia = g.Gia,
                     HinhAnh = g.HinhAnh,
                     TinhTrang = g.TinhTrang,
-                    TrangThai = g.TrangThai 
-                })
-                .OrderByDescending(g => g.MaGuiDia)
-                .ToPagedList(pageNumber, pageSize);
+                    TrangThai = g.TrangThai
+                });
 
+            // Nếu có chọn trạng thái, thì lọc thêm
+            if (trangThai.HasValue)
+            {
+                dsTin = dsTin.Where(g => g.TrangThai == trangThai);
+            }
+
+            // Thống kê số lượng tin theo trạng thái
+            ViewBag.CountHienThi = db.GuiDiaHiems.Count(g => g.MaKH == maKH && g.TrangThai == 1);
+            ViewBag.CountChoDuyet = db.GuiDiaHiems.Count(g => g.MaKH == maKH && g.TrangThai == 0);
+            ViewBag.CountTuChoi = db.GuiDiaHiems.Count(g => g.MaKH == maKH && g.TrangThai == 2);
+            ViewBag.CountDaAn = db.GuiDiaHiems.Count(g => g.MaKH == maKH && g.TrangThai == 3);
+
+            var gd = dsTin.OrderByDescending(g => g.MaGuiDia).ToPagedList(pageNumber, pageSize);
             return View(gd);
         }
         #endregion
+
 
         #region Ẩn tin
         [Authorize]
@@ -303,8 +318,8 @@ namespace TheGioiDiaMVC.Controllers
             db.GuiDiaHiems.Update(tin);
             await db.SaveChangesAsync();
 
-            TempData["AnThanhCong"] = "Tin đã được ẩn thành công!";
-            return RedirectToAction("QuanLyTin");
+            return RedirectToAction("QuanLyTin", new { thongBao = "AnThanhCong" });
+
         }
         #endregion
 
@@ -318,7 +333,8 @@ namespace TheGioiDiaMVC.Controllers
             {
                 tin.TrangThai = 1; 
                 db.SaveChanges();
-                TempData["HienThiThanhCong"] = "Tin đã được hiển thị lại thành công!";
+                return RedirectToAction("QuanLyTin", new { thongBao = "HienThiThanhCong" });
+
             }
             return RedirectToAction("QuanLyTin");
         }

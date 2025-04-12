@@ -314,34 +314,6 @@ namespace TheGioiDiaMVC.Migrations
                     b.ToTable("HoaDon", (string)null);
                 });
 
-            modelBuilder.Entity("TheGioiDiaMVC.Data.HoiDap", b =>
-                {
-                    b.Property<int>("MaHd")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaHd"));
-
-                    b.Property<string>("CauHoi")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MaNv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateOnly>("NgayDua")
-                        .HasColumnType("date");
-
-                    b.Property<string>("TraLoi")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MaHd");
-
-                    b.ToTable("HoiDaps");
-                });
-
             modelBuilder.Entity("TheGioiDiaMVC.Data.KhachHang", b =>
                 {
                     b.Property<string>("MaKh")

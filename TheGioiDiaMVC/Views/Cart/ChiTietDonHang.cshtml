@@ -1,0 +1,79 @@
+﻿@model IEnumerable<TheGioiDiaMVC.Data.ChiTietHd>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng ";
+    double phiVanChuyen = 30000;
+}
+<!-- Trang header chi tiết đơn hàng -->
+<div class="container-fluid page-header py-5" style="background: url('https://yourimageurl.com') no-repeat center center/cover; background: linear-gradient(45deg, #ff7e5f, #feb47b);">
+    <h1 class="text-center text-white display-4" style="text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <i class="fas fa-file-invoice-dollar"></i> Chi Tiết Đơn Hàng
+    </h1>
+    <p class="text-center text-white lead mt-3" style="font-size: 1.2rem; font-style: italic;">
+        Xem chi tiết đơn hàng của bạn, kiểm tra thông tin và tiến trình xử lý.
+    </p>
+</div>
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Số Lượng</th>
+                        <th>Giảm Giá</th>
+                        <th>Đơn Giá</th>
+                        <th>Thành Tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        double tongTien = 0;
+                    }
+                    @foreach (var ct in Model)
+                    {
+                        double thanhTien = (ct.DonGia * ct.SoLuong) - ct.GiamGia;
+                        tongTien += thanhTien;
+                        <tr>
+                            <td class="text-start">@ct.MaHhNavigation?.TenHh</td>
+                            <td>@ct.SoLuong</td>
+                            <td class="text-danger">-@ct.GiamGia.ToString("#,##0 VND")</td>
+                            <td>@ct.DonGia.ToString("#,##0 VND")</td>
+                            <td class="fw-bold text-success">@thanhTien.ToString("#,##0 VND")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <hr>
+
+            <!-- KHU VỰC TỔNG TIỀN -->
+            <div class="row justify-content-end">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded shadow-sm">
+                        <h5 class="d-flex justify-content-between">
+                            <span><i class="fas fa-shopping-cart"></i> Tổng tiền hàng:</span>
+                            <strong class="text-primary">@tongTien.ToString("#,##0 VND")</strong>
+                        </h5>
+                        <h5 class="d-flex justify-content-between">
+                            <span><i class="fas fa-shipping-fast"></i> Phí vận chuyển:</span>
+                            <strong class="text-secondary">@phiVanChuyen.ToString("#,##0 VND")</strong>
+                        </h5>
+                        <hr>
+                        <h4 class="d-flex justify-content-between text-danger fw-bold">
+                            <span><i class="fas fa-wallet"></i> Tổng thanh toán:</span>
+                            <strong>@((tongTien + phiVanChuyen).ToString("#,##0 VND"))</strong>
+                        </h4>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <a asp-action="TheoDoiDonHang" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại danh sách
+            </a>
+        </div>
+    </div>
+</div>

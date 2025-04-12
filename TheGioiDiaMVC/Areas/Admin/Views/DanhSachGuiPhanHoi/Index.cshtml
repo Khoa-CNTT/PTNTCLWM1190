@@ -1,0 +1,77 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.GopY>
+@using X.PagedList.Mvc.Core
+
+@{
+    ViewData["Title"] = "Danh sách góp ý";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h2 class="text-left mb-4" style="color: #7ed321; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Góp ý từ khách hàng
+</h2>
+
+@if (TempData["ThongBao"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["ThongBao"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row g-4">
+    @foreach (var item in Model)
+    {
+        var email = item.Email;
+        var hoTen = item.HoTen;
+        var noiDung = item.NoiDung;
+        var subject = "Phản hồi góp ý từ CD LOOP";
+        var body = $"Chào {hoTen},%0A%0A" +
+        $"Cảm ơn bạn đã gửi góp ý cho chúng tôi. Nội dung bạn gửi:%0A%0A{noiDung}%0A%0A" +
+        "Chúng tôi sẽ phản hồi sớm nhất.%0A%0ATrân trọng!";
+        var mailtoLink = $"mailto:{email}?subject={subject}&body={body}";
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-lg border-0" style="border-left: 5px solid #A259FF; background: linear-gradient(145deg, #f5f7fa, #ffffff); transition: all 0.3s;">
+                <div class="card-body">
+                    <h5 class="card-title mb-1" style="color: #A259FF;"><i class="fas fa-user-circle me-2"></i>@hoTen</h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-envelope me-1"></i>@item.Email</h6>
+                    <p class="card-text mt-3 text-dark" style="min-height: 100px;">@item.NoiDung</p>
+                    <p class="text-muted small mb-3"><i class="fas fa-calendar-alt me-1"></i>@item.NgayGy.ToString("dd/MM/yyyy")</p>
+                    <a href="@mailtoLink" class="btn btn-lg btn-gradient-purple text-white w-100" style="background: linear-gradient(to right, #A259FF, #7ed321); border: none;">
+                        <i class="fas fa-paper-plane me-2"></i> Trả lời qua Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Phân trang -->
+<div class="d-flex justify-content-center mt-5">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" style="background-color: #A259FF; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i })" style="background-color: #A259FF; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" style="background-color: #A259FF; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

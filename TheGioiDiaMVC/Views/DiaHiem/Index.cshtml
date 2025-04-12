@@ -9,15 +9,33 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
+
 <!-- Single Page Header start -->
-<div class="container-fluid page-header py-5">
-    <h1 class="text-center text-white display-6">CD LOOP – Rao Bán Ngay!</h1>
+<div class="container-fluid page-header py-5" style="background: url('https://yourimageurl.com') no-repeat center center/cover; background: linear-gradient(45deg, #6a11cb, #2575fc);">
+    <h1 class="text-center text-white display-4" style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <i class="fas fa-record-vinyl"></i> CD LOOP – Rao Bán Ngay!
+    </h1>
+    <p class="text-center text-white lead mt-3" style="font-size: 1.3rem; font-style: italic;">
+        Khám phá những đĩa CD sưu tầm độc đáo và rao bán ngay hôm nay!
+    </p>
 </div>
+<!-- Single Page Header end -->
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+
+@if (thongBao == "ThemTinThanhCong")
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <i class="fas fa-check-circle"></i> Thêm tin rao CD thành công! Đĩa của bạn đang chờ duyệt.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 <div class="container mt-4">
 
     <div class="d-flex justify-content-end gap-3 mb-4">
-        <a asp-action="QuanLyTin" class="btn btn-success btn-lg px-4">📝 Tin của bạn</a>
+        <a asp-action="QuanLyTin" class="btn btn-success btn-lg px-4">📝 Quản lý tin</a>
         <a asp-action="Create" class="btn btn-primary btn-lg px-4">📀 Đăng Đĩa</a>
     </div>
 

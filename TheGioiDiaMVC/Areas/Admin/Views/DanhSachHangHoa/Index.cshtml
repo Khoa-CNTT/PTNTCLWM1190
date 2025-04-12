@@ -6,32 +6,37 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-<!-- #region name -->
-@if (TempData["ThemThanhCong"] != null)
+@{
+    var thongBao = Context.Request.Query["thongBao"].ToString();
+}
+@if (thongBao == "CapNhatThanhCong")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["ThemThanhCong"]
+        <i class="fas fa-check-circle"></i> Cập nhật sản phẩm thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-@if (TempData["CapNhatThanhCong"] != null)
+@if (thongBao == "ThemThanhCong")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["CapNhatThanhCong"]
+        <i class="fas fa-check-circle"></i> Thêm sản phẩm thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-@if (TempData["XoaThanhCong"] != null)
+@if (thongBao == "XoaThanhCong")
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["XoaThanhCong"]
+        <i class="fas fa-check-circle"></i> Xóa sản phẩm thành công!
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<!-- #endregion -->
-
-
+else if (thongBao == "XoaThatBai")
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> Không thể xóa vì sản phẩm đang được sử dụng trong hóa đơn!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 <h2 class="text-center mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
     Quản lý danh mục
@@ -39,7 +44,7 @@
 <div class="d-flex justify-content-between">
     <div>
         <a asp-action="Loai" class="btn" style="background-color: #A259FF; color: white;">Quản lý danh mục</a>
-        <a asp-action="Loai" class="btn" style="background-color: #A259FF; color: white;">Quản lý Nhà cung cấp</a>
+        <a asp-action="NhaCungCap" class="btn" style="background-color: #A259FF; color: white;">Quản lý Nhà cung cấp</a>
     </div>
     <a asp-action="Them" class="btn" style="background-color: #7ed321; color: white;">Thêm sản phẩm</a>
 </div>
