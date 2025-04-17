@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheGioiDiaMVC.Data;
 
@@ -11,9 +12,11 @@ using TheGioiDiaMVC.Data;
 namespace TheGioiDiaMVC.Migrations
 {
     [DbContext(typeof(TheGioiDiaContext))]
-    partial class TheGioiDiaContextModelSnapshot : ModelSnapshot
+    [Migration("20250416040055_RemoveMaNvFromHoaDon")]
+    partial class RemoveMaNvFromHoaDon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,6 +70,9 @@ namespace TheGioiDiaMVC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("MaGY");
 
+                    b.Property<bool>("CanTraLoi")
+                        .HasColumnType("bit");
+
                     b.Property<string>("DienThoai")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -79,15 +85,27 @@ namespace TheGioiDiaMVC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("MaCd")
+                        .HasColumnType("int")
+                        .HasColumnName("MaCD");
+
                     b.Property<DateOnly>("NgayGy")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
                         .HasColumnName("NgayGY")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<DateOnly?>("NgayTl")
+                        .HasColumnType("date")
+                        .HasColumnName("NgayTL");
+
                     b.Property<string>("NoiDung")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TraLoi")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("MaGy");
 

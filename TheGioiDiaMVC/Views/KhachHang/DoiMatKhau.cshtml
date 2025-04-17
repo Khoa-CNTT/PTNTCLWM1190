@@ -2,56 +2,130 @@
 @{
     ViewData["Title"] = "Đổi Mật Khẩu";
 }
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
-<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-    <div class="card shadow-lg p-4 rounded-3" style="max-width: 500px; width: 100%;">
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 account-sidebar rounded-start">
+            <h6 class="text-uppercase px-3 pt-3">Cài đặt tài khoản</h6>
+            <a href="http://localhost:7001/KhachHang/Thongtincanhan">Thông tin cá nhân</a>
+            <a class="active" asp-action="DoiMatKhau">Đổi mật khẩu</a>
+            <a href="#">Hướng dẫn sử dụng</a>
+            <a href="#">Cài đặt giao diện</a>
+        </div>
 
-        <p class="text-center mt-4 fw-semibold text-dark" style="font-size: 1.1rem;">
-            🔒 <span class="text-primary">Bảo mật tài khoản</span> của bạn để tận hưởng <span class="text-danger">âm nhạc</span> trọn vẹn! 🎶
-        </p>
-        <h2 class="text-center mb-3 text-danger">Đổi Mật Khẩu</h2>
+        <!-- Nội dung đổi mật khẩu -->
+        <div class="col-md-9">
+            <div class="info-box">
+                <h4 class="mb-4 text-danger">🔒 Đổi Mật Khẩu</h4>
 
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-        }
+                <p class="text-muted">
+                    Đảm bảo tài khoản của bạn luôn an toàn bằng cách sử dụng mật khẩu mạnh và không chia sẻ với bất kỳ ai.
+                </p>
 
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-        }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                }
 
-        <form method="post">
-            @Html.AntiForgeryToken()
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                }
 
-            <div class="mb-3">
-                <label asp-for="MatKhauCu" class="form-label">Mật khẩu hiện tại</label>
-                <input asp-for="MatKhauCu" type="password" class="form-control" placeholder="Nhập mật khẩu hiện tại" />
-                <span class="text-danger" asp-validation-for="MatKhauCu"></span>
+                <form method="post" class="mx-auto">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label asp-for="MatKhauCu" class="form-label">Mật khẩu hiện tại</label>
+                        <input asp-for="MatKhauCu" type="password" class="form-control input-nho" placeholder="Nhập mật khẩu hiện tại" />
+                        <span class="text-danger" asp-validation-for="MatKhauCu"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="MatKhauMoi" class="form-label">Mật khẩu mới</label>
+                        <input asp-for="MatKhauMoi" type="password" class="form-control input-nho" placeholder="Nhập mật khẩu mới" />
+                        <span class="text-danger" asp-validation-for="MatKhauMoi"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="XacNhanMatKhauMoi" class="form-label">Xác nhận mật khẩu mới</label>
+                        <input asp-for="XacNhanMatKhauMoi" type="password" class="form-control input-nho" placeholder="Nhập lại mật khẩu mới" />
+                        <span class="text-danger" asp-validation-for="XacNhanMatKhauMoi"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4" style="max-width: 350px;">
+                        <a asp-action="Thongtincanhan" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                            <i class="bi bi-arrow-left-circle"></i> Quay về
+                        </a>
+
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 py-2">
+                            <i class="bi bi-lock-fill"></i> Đổi mật khẩu
+                        </button>
+                    </div>
+                </form>
+
             </div>
-
-            <div class="mb-3">
-                <label asp-for="MatKhauMoi" class="form-label">Mật khẩu mới</label>
-                <input asp-for="MatKhauMoi" type="password" class="form-control" placeholder="Nhập mật khẩu mới" />
-                <span class="text-danger" asp-validation-for="MatKhauMoi"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="XacNhanMatKhauMoi" class="form-label">Xác nhận mật khẩu mới</label>
-                <input asp-for="XacNhanMatKhauMoi" type="password" class="form-control" placeholder="Nhập lại mật khẩu mới" />
-                <span class="text-danger" asp-validation-for="XacNhanMatKhauMoi"></span>
-            </div>
-
-            <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">Đổi mật khẩu</button>
-        </form>
-
-        <div class="text-center mt-3">
-            <a asp-action="HoSo" class="btn btn-primary w-100 py-2 fw-bold rounded-2">Quay lại hồ sơ</a>
         </div>
     </div>
 </div>
 
+<style>
+    .input-nho {
+        max-width: 350px;
+        width: 100%;
+    }
 
+    form.mx-auto {
+        max-width: 400px;
+    }
+    body {
+        background-color: #F8F8FF;
+        color: #161b22;
+    }
 
+    .account-sidebar {
+        background-color: #e6edf3;
+        border-right: 1px solid #e6edf3;
+        height: 100%;
+        min-height: 400px;
+    }
 
+        .account-sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: #161b22;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+        }
 
+            .account-sidebar a.active,
+            .account-sidebar a:hover {
+                background-color: #00FF7F;
+                border-left: 4px solid #2f81f7;
+                color: #000000;
+            }
+
+    .info-box {
+        background-color: #e6edf3;
+        padding: 24px;
+        border-radius: 8px;
+        border: 1px solid #30363d;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #161b22;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+</style>

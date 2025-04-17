@@ -466,16 +466,76 @@ namespace TheGioiDiaMVC.Controllers
 
             if (response == null || response.VnPayResponseCode != "00")
             {
-                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response?.VnPayResponseCode ?? "Không rõ lỗi"}";
                 return RedirectToAction("PaymentFail");
             }
 
+            var customerId = HttpContext.User.Claims.SingleOrDefault(p => p.Type == MySetting.CLAIM_CUSTOMERID)?.Value;
+            var khachHang = db.KhachHangs.SingleOrDefault(kh => kh.MaKh == customerId);
+            if (khachHang == null) return RedirectToAction("DangNhap", "KhachHang");
 
-            // Lưu đơn hàng vô database
+            // Lấy lại thông tin người nhận từ TempData
+            var json = TempData["CheckoutVM"] as string;
+            var checkoutVM = string.IsNullOrEmpty(json)
+                ? new CheckoutVM()
+                : System.Text.Json.JsonSerializer.Deserialize<CheckoutVM>(json);
 
-            TempData["Message"] = $"Thanh toán VNPay thành công";
-            return RedirectToAction("PaymentSuccess");
+            var hoadon = new HoaDon
+            {
+                MaKh = customerId,
+                HoTen = checkoutVM?.HoTen ?? khachHang.HoTen,
+                DiaChi = checkoutVM?.DiaChi ?? khachHang.DiaChi,
+                DienThoai = checkoutVM?.DienThoai ?? khachHang.DienThoai,
+                NgayDat = DateTime.Now,
+                CachThanhToan = "VNPay",
+                CachVanChuyen = "VietelPost",
+                MaTrangThai = 1,
+                GhiChu = "Thanh toán qua VN PAY"
+            };
+
+            db.Database.BeginTransaction();
+            try
+            {
+                db.Add(hoadon);
+                db.SaveChanges();
+
+                foreach (var item in Cart)
+                {
+                    var hangHoa = db.HangHoas.SingleOrDefault(h => h.MaHh == item.MaHh);
+                    if (hangHoa == null || hangHoa.SoLanXem < item.SoLuong)
+                    {
+                        db.Database.RollbackTransaction();
+                        TempData["Message"] = "Sản phẩm không đủ số lượng!";
+                        return RedirectToAction("PaymentFail");
+                    }
+
+                    hangHoa.SoLanXem -= item.SoLuong;
+
+                    db.Add(new ChiTietHd
+                    {
+                        MaHd = hoadon.MaHd,
+                        SoLuong = item.SoLuong,
+                        DonGia = item.DonGia,
+                        MaHh = item.MaHh,
+                        GiamGia = 0
+                    });
+                }
+
+                db.SaveChanges();
+                db.Database.CommitTransaction();
+
+                HttpContext.Session.Remove(MySetting.CART_KEY);
+                TempData["Message"] = "Thanh toán VNPay thành công";
+                return RedirectToAction("PaymentSuccess");
+            }
+            catch
+            {
+                db.Database.RollbackTransaction();
+                TempData["Message"] = "Có lỗi khi lưu đơn hàng.";
+                return RedirectToAction("PaymentFail");
+            }
         }
+
 
 
 

@@ -39,9 +39,16 @@
 						<div class="form-item mt-3">
 							<textarea name="GhiChu" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Ghi chú"></textarea>
 						</div>
-						<input type="submit" name="payment" class="btn border-secondary text-uppercase text-primary w-100 mt-2" value="Đặt hàng (COD)">
-						<input type="submit" name="payment" class="btn border-secondary text-uppercase text-primary w-100 mt-2" value="Thanh toán VNPay">
-						<div id="paypal-button-container" class="form-item mt-3" style="max-width:1000px;"></div>
+						<div class="payment-methods mt-4">
+							<h5 class="text-center fw-bold mb-3">Chọn phương thức thanh toán</h5>
+
+							<input type="submit" name="payment" class="btn cod-btn text-uppercase w-100 mb-2" value="Đặt hàng (COD)">
+
+							<input type="submit" name="payment" class="btn vnPay-btn text-uppercase w-100 mb-2" value="Thanh toán VNPay">
+
+							<div id="paypal-button-container" class="form-item mt-2" style="max-width:1000px;"></div>
+						</div>
+
 
 					</div>
 
@@ -181,3 +188,41 @@
 		});
 	</script>
 }
+<style>
+	.vnPay-btn {
+		background-color: #005f73; /* Xanh biển đậm */
+		color: #ffffff; /* Màu chữ trắng */
+		border: 2px solid #005f73; /* Viền màu xanh biển đậm */
+		padding: 10px 20px;
+		font-size: 16px;
+		text-transform: uppercase;
+		font-weight: bold;
+		border-radius: 5px; /* Bo góc */
+		transition: background-color 0.3s, border-color 0.3s;
+	}
+
+		.vnPay-btn:hover {
+			background-color: #0a9396; /* Màu xanh biển sáng hơn khi hover */
+			border-color: #0a9396; /* Viền đổi màu khi hover */
+			cursor: pointer; /* Thêm hiệu ứng con trỏ khi hover */
+		}
+
+		.vnPay-btn:focus {
+			outline: none; /* Bỏ viền khi nút được focus */
+		}
+
+	.cod-btn {
+		background-color: #339900; /* Cam đất */
+		color: #fff;
+		border: 2px solid #339900;
+		font-weight: bold;
+		transition: 0.3s;
+	}
+
+		.cod-btn:hover {
+			background-color: #339900;
+			border-color: #339900;
+			color: #fff;
+		}
+
+</style>

@@ -25,7 +25,8 @@ namespace TheGioiDiaMVC.Controllers
         {
             if (string.IsNullOrEmpty(model.MaLH))
             {
-                model.MaLH = Guid.NewGuid().ToString();  // Gán nếu null
+                model.MaLH = Guid.NewGuid().ToString();
+
             }
 
             if (ModelState.IsValid)

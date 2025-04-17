@@ -42,7 +42,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == 0 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 0 })">  Chờ giao hàng 
+            <a class="nav-link @(ViewBag.TrangThai == 0 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 0 })">  Chờ duyệt 
                 @if (ViewBag.SoLuongChuaGiao > 0)
                 {
                     <span class="badge bg-warning">@ViewBag.SoLuongChuaGiao</span>
@@ -51,7 +51,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == 2 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 2 })">Đang vận chuyển
+            <a class="nav-link @(ViewBag.TrangThai == 2 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 2 })">Đã duyệt - Đang vận chuyển
                 @if (ViewBag.SoLuongDangVanChuyen > 0)
                 {
                     <span class="badge bg-info">@ViewBag.SoLuongDangVanChuyen</span>

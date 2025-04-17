@@ -159,6 +159,25 @@ namespace TheGioiDiaMVC.Controllers
         }
         #endregion
 
+        #region xem thông tin cá nhân
+        [Authorize(Roles = "KhachHang")]
+        public IActionResult Thongtincanhan()
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
+            }
+
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var khachHang = db.KhachHangs.SingleOrDefault(kh => kh.Email == userEmail);
+
+            if (khachHang == null) return RedirectToAction("DangNhap");
+
+            var model = _mapper.Map<HoSoVM>(khachHang);
+            return View(model);
+        }
+        #endregion
+
 
         #region Hồ sơ
         [Authorize(Roles = "KhachHang")]
@@ -217,7 +236,7 @@ namespace TheGioiDiaMVC.Controllers
                 }
 
                 db.SaveChanges();
-                ViewData["SuccessMessage"] = "Cập nhật thành công!";
+                return RedirectToAction("Thongtincanhan", "KhachHang", new { thongBao = "capnhatthanhcong" });
                 return View(model);
 
             }
@@ -333,7 +352,7 @@ namespace TheGioiDiaMVC.Controllers
             khachHang.MatKhau = model.MatKhauMoi.ToMd5Hash(khachHang.RandomKey);
             db.SaveChanges();
 
-            return RedirectToAction("HoSo", new { thongBao = "DoiMatKhauThanhCong" });
+            return RedirectToAction("Thongtincanhan", "KhachHang", new { thongBao = "doimatkhauthanhcong" });
 
         }
         #endregion

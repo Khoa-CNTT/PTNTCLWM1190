@@ -91,9 +91,44 @@
                                 <i class="fas fa-search text-primary"></i>
                             </button>
                             @await Component.InvokeAsync("Cart")
-                            <a asp-controller="KhachHang" asp-action="@(User.Identity.IsAuthenticated ? "HoSo" : "DangNhap")" class="my-auto">
-                                <i class="fas fa-user fa-2x"></i>
-                            </a>
+                            <div class="dropdown my-auto">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <!-- Icon User và Dropdown -->
+                                    <a class="dropdown-toggle my-auto" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-user fa-2x"></i>
+                                        </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow rounded-4 p-2 border-0" style="min-width: 230px; background-color: #f8f9fa;">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-2 rounded-3 fw-medium hover-item"
+                                               asp-controller="KhachHang" asp-action="Thongtincanhan">
+                                                <i class="bi bi-person-circle fs-5 text-success"></i> Thông tin cá nhân
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-2 rounded-3 fw-medium hover-item"
+                                               asp-controller="KhachHang" asp-action="DangXuat">
+                                                <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Đăng xuất
+                                            </a>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <!-- Link Đăng Nhập -->
+                                    <a asp-controller="KhachHang" asp-action="DangNhap" class="my-auto">
+                                        <i class="fas fa-user fa-2x"></i>
+                                    </a>
+                                    <a asp-controller="KhachHang" asp-action="DangNhap" class="text-white">
+                                        <small class="text-white ms-2">Đăng nhập</small>
+                                    </a>
+                                }
+                            </div>
+
+
+
+                            </div>
+
                         </div>
                     </div>
                 </nav>
@@ -146,3 +181,14 @@
     </script>
 </body>
 </html>
+<style>
+    .dropdown-menu .hover-item:hover {
+        background-color: #d1e7dd;
+        color: #000;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dropdown-menu .dropdown-item {
+        font-size: 0.95rem;
+    }
+</style>

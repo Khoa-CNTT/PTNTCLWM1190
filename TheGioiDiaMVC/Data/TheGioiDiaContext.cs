@@ -76,12 +76,9 @@ public partial class TheGioiDiaContext : DbContext
             entity.Property(e => e.DienThoai).HasMaxLength(50);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.HoTen).HasMaxLength(50);
-            entity.Property(e => e.MaCd).HasColumnName("MaCD");
             entity.Property(e => e.NgayGy)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnName("NgayGY");
-            entity.Property(e => e.NgayTl).HasColumnName("NgayTL");
-            entity.Property(e => e.TraLoi).HasMaxLength(50);
         });
 
         modelBuilder.Entity<HangHoa>(entity =>
@@ -135,9 +132,6 @@ public partial class TheGioiDiaContext : DbContext
             entity.Property(e => e.MaKh)
                 .HasMaxLength(20)
                 .HasColumnName("MaKH");
-            entity.Property(e => e.MaNv)
-                .HasMaxLength(50)
-                .HasColumnName("MaNV");
             entity.Property(e => e.NgayCan)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
