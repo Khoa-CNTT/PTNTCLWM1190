@@ -1,0 +1,86 @@
+﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.HoaDon>
+@using X.PagedList.Mvc.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Đơn hàng đã hoàn tất";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-left mb-3" style="color: #A259FF; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Đơn hàng đã hoàn tất
+</h2>
+
+<table class="table table-bordered mt-3">
+    <thead class="table-success">
+        <tr>
+            <th>Ngày đặt</th>
+            <th>Họ tên</th>
+            <th>Địa chỉ</th>
+            <th>Cách thanh toán</th>
+            <th>Ghi chú</th>
+            <th>Điện thoại</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-success">
+                <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
+                <td>@item.HoTen</td>
+                <td>@item.DiaChi</td>
+                <td>@item.CachThanhToan</td>
+                <td>@item.GhiChu</td>
+                <td>@item.DienThoai</td>
+                <td>@item.MaTrangThaiNavigation.TenTrangThai</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-action="ChiTiet"
+                           asp-route-MaHd="@item.MaHd"
+                           class="btn btn-sm"
+                           style="background-color: #7ed321; color: white;">
+                            Xem chi tiết
+                        </a>
+                        <form action="@Url.Action("XoaDonHang", "DanhSachDonHang")" method="post" onsubmit="return confirm('Bạn có chắc muốn xoá đơn hàng này?');">
+                            <input type="hidden" name="id" value="@item.MaHd" />
+                            <button type="submit" class="btn btn-danger btn-sm">Xoá</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("DonHangDaHoanTat", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("DonHangDaHoanTat", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("DonHangDaHoanTat", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<p>
+    <a asp-action="Index" class="btn" style="background-color: #7ed321; color: white;">Quay lại danh sách đơn</a>
+</p>
