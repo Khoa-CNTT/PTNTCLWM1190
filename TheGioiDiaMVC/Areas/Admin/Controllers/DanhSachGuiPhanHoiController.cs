@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheGioiDiaMVC.Data;
 using X.PagedList.Extensions;
@@ -27,6 +27,14 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
 
             return View(gy);
         }
-
+        public IActionResult ChiTiet(string MaGy)
+        {
+            var gopY = db.Gopies.FirstOrDefault(g => g.MaGy == MaGy);  // Sửa từ id thành MaGy
+            if (gopY == null)
+            {
+                return NotFound();
+            }
+            return View(gopY);
+        }
     }
 }
