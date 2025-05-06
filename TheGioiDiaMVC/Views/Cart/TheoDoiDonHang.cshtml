@@ -1,6 +1,8 @@
-﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.ViewModels.HoaDonVM>
+@model X.PagedList.IPagedList<TheGioiDiaMVC.ViewModels.HoaDonVM>
 @using X.PagedList.Mvc.Core
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @{
     ViewData["Title"] = "Theo Dõi Đơn Hàng";
@@ -20,9 +22,8 @@
     </div>
 }
 
-<!-- Trang header theo dõi đơn hàng -->
-
-<div class="container-fluid page-header py-5" style="background: url('https://yourimageurl.com') no-repeat center center/cover; background: linear-gradient(45deg, #4e73df, #1cc88a);">
+<!-- Header -->
+<div class="container-fluid page-header py-5" style="background: linear-gradient(45deg, #4e73df, #1cc88a);">
     <h1 class="text-center text-white display-4" style="text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         <i class="fas fa-truck-moving"></i> Theo Dõi Đơn Hàng
     </h1>
@@ -31,10 +32,12 @@
     </p>
 </div>
 
+<!-- Tabs Trạng Thái -->
 <div class="container mt-3">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == null ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = (int?)null })">Tất cả
+            <a class="nav-link @(ViewBag.TrangThai == null ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = (int?)null })">
+                Tất cả
                 @if (ViewBag.SoLuongTatCa > 0)
                 {
                     <span class="badge bg-secondary">@ViewBag.SoLuongTatCa</span>
@@ -42,40 +45,54 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == 0 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 0 })">  Chờ duyệt 
-                @if (ViewBag.SoLuongChuaGiao > 0)
+            <a class="nav-link @((ViewBag.TrangThai == 0 || ViewBag.TrangThai == -2) ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 0 })">
+                Chờ xác nhận
+                @if (ViewBag.soLuongChoXacNhan > 0)
                 {
-                    <span class="badge bg-warning">@ViewBag.SoLuongChuaGiao</span>
-                }
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == 2 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 2 })">Đã duyệt - Đang vận chuyển
-                @if (ViewBag.SoLuongDangVanChuyen > 0)
-                {
-                    <span class="badge bg-info">@ViewBag.SoLuongDangVanChuyen</span>
+                    <span class="badge bg-warning">@ViewBag.soLuongChoXacNhan</span>
                 }
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == 3 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 3 })">Hoàn thành
-                @if (ViewBag.SoLuongHoanThanh > 0)
+            <a class="nav-link @(ViewBag.TrangThai == 1 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 1 })">
+                Chuẩn bị hàng, Chờ giao hàng
+                @if (ViewBag.soLuongChoGiaoHang > 0)
                 {
-                    <span class="badge bg-success">@ViewBag.SoLuongHoanThanh</span>
+                    <span class="badge bg-info">@ViewBag.soLuongChoGiaoHang</span>
                 }
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link @(ViewBag.TrangThai == -1 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = -1 })">Đã huỷ
-                @if (ViewBag.SoLuongHuy > 0)
+            <a class="nav-link @( (ViewBag.TrangThai == 99) ? "active" : "" )"
+               href="@Url.Action("TheoDoiDonHang", new { trangThai = 99 })">
+                Đang giao hàng
+                @if (ViewBag.soLuongDangGiaoHang > 0)
                 {
-                    <span class="badge bg-danger">@ViewBag.SoLuongHuy</span>
+                    <span class="badge bg-success">@ViewBag.soLuongDangGiaoHang</span>
+                }
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewBag.TrangThai == 3 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = 3 })">
+                Giao hàng thành công
+                @if (ViewBag.soLuongGiaoHangThanhCong > 0)
+                {
+                    <span class="badge bg-success">@ViewBag.soLuongGiaoHangThanhCong</span>
+                }
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(ViewBag.TrangThai == -1 ? "active" : "")" href="@Url.Action("TheoDoiDonHang", new { trangThai = -1 })">
+                Đã huỷ
+                @if (ViewBag.soLuongHuyDonHang > 0)
+                {
+                    <span class="badge bg-danger">@ViewBag.soLuongHuyDonHang</span>
                 }
             </a>
         </li>
     </ul>
 
+    <!-- Danh sách đơn -->
     <div class="mt-3">
         @if (!Model.Any())
         {
@@ -101,15 +118,24 @@
                                 </div>
                                 <div class="card-footer text-center">
                                     <p><strong>Trạng Thái:</strong> @item.TenTrangThai</p>
-                                    @if (item.TenTrangThai == "Mới đặt hàng" || item.TenTrangThai == "Đã thanh toán")
+                                    @if (item.TenTrangThai == "Đặt hàng thành công ,Chờ xác nhận" || item.TenTrangThai == "Đã thanh toán,Chờ xác nhận")
                                     {
                                         <a asp-action="HuyDonHang" asp-route-id="@item.MaHd" class="btn btn-danger btn-sm me-2" onclick="return confirm('Bạn có chắc chắn muốn huỷ đơn hàng này?')">Huỷ Đơn</a>
                                     }
-                                    @if (item.TenTrangThai == "Chờ giao hàng")
+                                    @if (item.TenTrangThai == "Đang giao hàng")
                                     {
-                                        <form asp-action="XacNhanDaNhanHang" method="post" class="d-inline">
+                                        <form asp-action="XacNhanDaNhanHang" method="post" class="d-inline" onsubmit="return confirmDaNhanHang(this)">
                                             <input type="hidden" name="id" value="@item.MaHd" />
-                                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Bạn đã nhận hàng thành công?')">Đã nhận hàng</button>
+                                        </form>
+                                    }
+                                    @if (item.TenTrangThai == "Bên giao hàng đã giao cho khách")
+                                    {
+                                        <form asp-action="XacNhanDaNhanHang" method="post" class="d-inline" onsubmit="return confirmDaNhanHang(this)">
+                                            <input type="hidden" name="id" value="@item.MaHd" />
+                                            <button type="submit" class="btn btn-success btn-sm">Đã nhận hàng</button>
+                                            <p class="text-warning">
+                                                * Sẽ tự động xác nhận đã nhận hàng sau 24h.
+                                            </p>
                                         </form>
                                     }
                                 </div>
@@ -122,42 +148,62 @@
     </div>
 </div>
 
+<!-- Phân trang -->
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("TheoDoiDonHang", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
+                </li>
+            }
 
-        <!-- Phân trang -->
-        <div class="d-flex justify-content-center mt-4">
-            <nav>
-                <ul class="pagination">
-                    @if (Model.HasPreviousPage)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("TheoDoiDonHang", new { page = Model.PageNumber - 1 })" style="background-color: #7ed321; color: white;">Trước</a>
-                        </li>
-                    }
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("TheoDoiDonHang", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
+                </li>
+            }
 
-                    @for (int i = 1; i <= Model.PageCount; i++)
-                    {
-                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("TheoDoiDonHang", new { page = i })" style="background-color: #7ed321; color: white;">@i</a>
-                        </li>
-                    }
-
-                    @if (Model.HasNextPage)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" href="@Url.Action("TheoDoiDonHang", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
-                        </li>
-                    }
-                </ul>
-            </nav>
-        </div>
-    }
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("TheoDoiDonHang", new { page = Model.PageNumber + 1 })" style="background-color: #7ed321; color: white;">Tiếp</a>
+                </li>
+            }
+        </ul>
+    </nav>
 </div>
+
+<!-- CSS Hover Card -->
 <style>
-.hover-effect {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-.hover-effect:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-}
+    .hover-effect {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        }
 </style>
+<script>
+    function confirmDaNhanHang(form) {
+        event.preventDefault(); // Chặn form submit tự động
+        Swal.fire({
+            title: 'Xác nhận đã nhận hàng?',
+            text: 'Nếu chưa nhận, vui lòng không xác nhận. Shop không chịu trách nhiệm nếu sai.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Tôi đã nhận hàng',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // Nếu đồng ý thì submit form
+            }
+        });
+        return false; // Không cho submit mặc định
+    }
+</script>
