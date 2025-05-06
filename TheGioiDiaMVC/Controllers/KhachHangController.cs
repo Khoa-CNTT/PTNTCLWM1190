@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +66,6 @@ namespace TheGioiDiaMVC.Controllers
         }
 
         #endregion
-
 
 
         #region Đăng nhập
@@ -227,6 +226,8 @@ namespace TheGioiDiaMVC.Controllers
                 khachHang.HoTen = model.HoTen;
                 khachHang.DienThoai = model.DienThoai;
                 khachHang.DiaChi = model.DiaChi;
+                khachHang.NgaySinh = model.NgaySinh;
+
 
                 if (thayDoiEmail) khachHang.Email = model.Email;
 
@@ -239,71 +240,6 @@ namespace TheGioiDiaMVC.Controllers
                 return RedirectToAction("Thongtincanhan", "KhachHang", new { thongBao = "capnhatthanhcong" });
                 return View(model);
 
-            }
-
-            return View(model);
-        }
-
-        #endregion
-
-        #region Hồ sơ Admin
-        [Authorize(Roles = "Admin,NhanVien")]
-        public async Task<IActionResult> HoSoAdmin()
-        {
-            if (User.IsInRole("KhachHang"))
-            {
-                return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
-            }
-
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            var khachHang = db.KhachHangs.SingleOrDefault(kh => kh.Email == userEmail);
-
-            if (khachHang == null) return RedirectToAction("DangNhap");
-
-            var model = _mapper.Map<HoSoVM>(khachHang);
-            return View(model);
-        }
-
-
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> HoSoAdmin(HoSoVM model, IFormFile? Hinh, string? MatKhauHienTai)
-        {
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            var khachHang = db.KhachHangs.SingleOrDefault(kh => kh.Email == userEmail);
-
-            if (khachHang == null) return RedirectToAction("DangNhap");
-
-            bool thayDoiEmail = model.Email != khachHang.Email;
-            bool thayDoiDienThoai = model.DienThoai != khachHang.DienThoai;
-
-            if ((thayDoiEmail || thayDoiDienThoai) && string.IsNullOrEmpty(MatKhauHienTai))
-            {
-                ModelState.AddModelError("", "Vui lòng nhập mật khẩu hiện tại để thay đổi Email hoặc Số điện thoại.");
-                return View(model);
-            }
-
-            if (!string.IsNullOrEmpty(MatKhauHienTai) && khachHang.MatKhau != MatKhauHienTai.ToMd5Hash(khachHang.RandomKey))
-            {
-                ModelState.AddModelError("", "Mật khẩu hiện tại không chính xác.");
-                return View(model);
-            }
-
-            if (ModelState.IsValid)
-            {
-                khachHang.HoTen = model.HoTen;
-                khachHang.DienThoai = model.DienThoai;
-                khachHang.DiaChi = model.DiaChi;
-
-                if (thayDoiEmail) khachHang.Email = model.Email;
-
-                if (Hinh != null)
-                {
-                    khachHang.Hinh = MyUtil.UploadHinh(Hinh, "KhachHang");
-                }
-
-                db.SaveChanges();
-                return RedirectToAction("HoSoAdmin", new { thongBao = "CapNhatHoSoThanhCong" });
             }
 
             return View(model);
@@ -353,52 +289,6 @@ namespace TheGioiDiaMVC.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Thongtincanhan", "KhachHang", new { thongBao = "doimatkhauthanhcong" });
-
-        }
-        #endregion
-
-        #region Đổi mật khẩu Admin
-        [Authorize]
-        [HttpGet]
-        public IActionResult DoiMatKhauAdmin()
-        {
-            return View(new DoiMatKhauVM());
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult DoiMatKhauAdmin(DoiMatKhauVM model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            var khachHang = db.KhachHangs.SingleOrDefault(kh => kh.Email == userEmail);
-
-            if (khachHang == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy tài khoản. Vui lòng đăng nhập lại.";
-                return RedirectToAction("DangNhap");
-            }
-
-            if (khachHang.MatKhau != model.MatKhauCu.ToMd5Hash(khachHang.RandomKey))
-            {
-                ModelState.AddModelError("MatKhauCu", "Mật khẩu hiện tại không chính xác.");
-                return View(model);
-            }
-
-            if (model.MatKhauMoi != model.XacNhanMatKhauMoi)
-            {
-                ModelState.AddModelError("XacNhanMatKhauMoi", "Mật khẩu mới nhập lại không khớp.");
-                return View(model);
-            }
-
-            khachHang.MatKhau = model.MatKhauMoi.ToMd5Hash(khachHang.RandomKey);
-            db.SaveChanges();
-
-            return RedirectToAction("HoSoAdmin", new { thongBao = "DoiMatKhauThanhCong" });
 
         }
         #endregion
