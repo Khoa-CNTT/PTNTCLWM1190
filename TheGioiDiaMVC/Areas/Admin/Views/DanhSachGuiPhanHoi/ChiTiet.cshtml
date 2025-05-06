@@ -1,0 +1,47 @@
+﻿@model TheGioiDiaMVC.Data.GopY
+
+@{
+    ViewData["Title"] = "Chi Tiết Góp Ý";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="text-left mb-4" style="color: #7ed321; font-weight: bold; font-family: 'Poppins', sans-serif; text-transform: uppercase;">
+    Chi Tiết Góp Ý
+</h2>
+
+<div class="card shadow-lg border-0" style="border-left: 5px solid #A259FF; background: linear-gradient(145deg, #f5f7fa, #ffffff);">
+    <div class="card-body">
+        <!-- Tiêu đề Email -->
+        <h5 class="card-title mb-4" style="color: #A259FF; font-size: 24px; font-weight: 600;">
+            <i class="fas fa-envelope me-2"></i>Phản hồi góp ý từ CD LOOP
+        </h5>
+
+        <!-- Ngày gửi và thông tin gửi -->
+        <div class="mb-4" style="border-bottom: 1px solid #A259FF; padding-bottom: 20px;">
+            <div><strong>Người gửi:</strong> <span style="color: #7ed321;">@Model.HoTen</span></div>
+            <div><strong>Email:</strong> <span>@Model.Email</span></div>
+            <div><strong>Ngày gửi:</strong> <span>@Model.NgayGy.ToString("dd/MM/yyyy")</span></div>
+        </div>
+
+        <!-- Nội dung Email -->
+        <div class="mb-4">
+            <strong style="color: #7ed321; font-size: 18px;">Nội dung góp ý:</strong>
+            <p class="text-dark mt-2" style="font-size: 16px; line-height: 1.6; min-height: 150px;">@Model.NoiDung</p>
+        </div>
+
+
+
+        <!-- Thực hiện phản hồi qua email -->
+        <a href="mailto:@Model.Email?subject=Phản hồi góp ý từ CD LOOP&body=Cảm ơn bạn đã gửi góp ý. Nội dung của bạn là: @Model.NoiDung. Chúng tôi sẽ phản hồi bạn sớm."
+           class="btn btn-lg btn-gradient-purple text-white" style="background: linear-gradient(to right, #A259FF, #7ed321); border: none;">
+            <i class="fas fa-paper-plane me-2"></i> Trả lời qua Email
+        </a>
+    </div>
+</div>
+
+<!-- Link quay lại -->
+<div class="mt-3">
+    <a href="@Url.Action("Index", "DanhSachGuiPhanHoi", new { area = "Admin" })" class="btn btn-outline-secondary" style="border: 2px solid #A259FF; color: #A259FF;">
+        <i class="fas fa-arrow-left me-2"></i> Quay lại danh sách
+    </a>
+</div>
