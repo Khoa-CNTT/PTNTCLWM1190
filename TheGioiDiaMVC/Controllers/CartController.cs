@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using TheGioiDiaMVC.Data;
 using TheGioiDiaMVC.ViewModels;
 using TheGioiDiaMVC.Helpers;
@@ -222,18 +222,21 @@ namespace TheGioiDiaMVC.Controllers
         [HttpPost("/Cart/create-paypal-order")]
         public async Task<IActionResult> CreatePaypalOrder(CancellationToken cancellationToken)
         {
-            // Thông tin đơn hàng gửi qua PayPal
-            var tongTien = (Cart.Sum(p => p.ThanhTien) + 30000).ToString();
+            // Giả sử tỷ giá 1 USD = 24,000 VND
+            double tyGiaUSD = 24000;
+
+            // Tính tổng tiền VNĐ
+            var tongTienVND = Cart.Sum(p => p.ThanhTien) + 30000;
+
+            // Chuyển sang USD, làm tròn 2 chữ số sau dấu chấm
+            var tongTienUSD = (tongTienVND / tyGiaUSD).ToString("0.00");
+
             var donViTienTe = "USD";
             var maDonHangThamChieu = "DH" + DateTime.Now.Ticks.ToString();
-            double tyGiaUSD = 24000; // Giả sử tỷ giá 1 USD = 24,000 VND
-            var tongTienUSD = ((Cart.Sum(p => p.ThanhTien) + 30000) / tyGiaUSD).ToString("0.00");
-
 
             try
             {
-                var response = await _paypalClient.CreateOrder(tongTien, donViTienTe, maDonHangThamChieu);
-
+                var response = await _paypalClient.CreateOrder(tongTienUSD, donViTienTe, maDonHangThamChieu);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -242,6 +245,7 @@ namespace TheGioiDiaMVC.Controllers
                 return BadRequest(error);
             }
         }
+    
 
         [Authorize]
         [HttpPost("/Cart/capture-paypal-order")]
@@ -272,7 +276,7 @@ namespace TheGioiDiaMVC.Controllers
                     NgayDat = DateTime.Now,
                     CachThanhToan = "PayPal",
                     CachVanChuyen = "ViettelPost",
-                    MaTrangThai = 1, // Đã thanh toán
+                    MaTrangThai = -2, // Đã thanh toán
                     GhiChu = "Thanh toán qua PayPal"
                 };
 
@@ -333,7 +337,9 @@ namespace TheGioiDiaMVC.Controllers
         [Authorize]
         public IActionResult TheoDoiDonHang(int? page, int? trangThai)
         {
-            var maKH = HttpContext.User.Claims.SingleOrDefault(c => c.Type == MySetting.CLAIM_CUSTOMERID)?.Value;
+            var maKH = HttpContext.User.Claims
+                .SingleOrDefault(c => c.Type == MySetting.CLAIM_CUSTOMERID)?.Value;
+
             if (string.IsNullOrEmpty(maKH))
             {
                 return RedirectToAction("DangNhap", "KhachHang");
@@ -342,32 +348,36 @@ namespace TheGioiDiaMVC.Controllers
             int pageSize = 7;
             int pageNumber = page ?? 1;
 
+            // Lấy toàn bộ đơn hàng của khách
             var query = db.HoaDons
                 .Include(hd => hd.MaTrangThaiNavigation)
                 .Include(hd => hd.ChiTietHds)
                 .Where(hd => hd.MaKh == maKH);
 
-            var soLuongTatCa = query.Count();
-            var soLuongChuaGiao = query.Where(hd => hd.MaTrangThai == 0 || hd.MaTrangThai == 1).Count();
-            var soLuongDangVanChuyen = query.Where(hd => hd.MaTrangThai == 2).Count();
-            var soLuongHoanThanh = query.Where(hd => hd.MaTrangThai == 3).Count();
-            var soLuongHuy = query.Where(hd => hd.MaTrangThai == -1).Count();
+            // Đếm số lượng từng loại
+            ViewBag.SoLuongTatCa = query.Count();
+            ViewBag.soLuongChoXacNhan = query.Count(hd => hd.MaTrangThai == 0 || hd.MaTrangThai == -2);
+            ViewBag.soLuongChoGiaoHang = query.Count(hd => hd.MaTrangThai == 1);
+            ViewBag.soLuongDangGiaoHang = query.Count(hd => hd.MaTrangThai == 2 || hd.MaTrangThai == 5);
+            ViewBag.soLuongGiaoHangThanhCong = query.Count(hd => hd.MaTrangThai == 3);
+            ViewBag.soLuongHuyDonHang = query.Count(hd => hd.MaTrangThai == -1);
 
-            ViewBag.SoLuongTatCa = soLuongTatCa;
-            ViewBag.SoLuongChuaGiao = soLuongChuaGiao;
-            ViewBag.SoLuongDangVanChuyen = soLuongDangVanChuyen;
-            ViewBag.SoLuongHoanThanh = soLuongHoanThanh;
-            ViewBag.SoLuongHuy = soLuongHuy;
-
+            // Lọc theo trạng thái (nếu có)
             if (trangThai == 0)
             {
-                query = query.Where(hd => hd.MaTrangThai == 0 || hd.MaTrangThai == 1);
+                query = query.Where(hd => hd.MaTrangThai == 0 || hd.MaTrangThai == -2);
+            }
+            else if (trangThai == 99)
+            {
+                query = query.Where(hd => hd.MaTrangThai == 2 || hd.MaTrangThai == 5);
             }
             else if (trangThai.HasValue)
             {
                 query = query.Where(hd => hd.MaTrangThai == trangThai);
             }
 
+
+            // Map ra ViewModel
             var hoaDonList = query
                 .Select(hd => new HoaDonVM
                 {
@@ -384,6 +394,7 @@ namespace TheGioiDiaMVC.Controllers
             return View(hoaDonList);
         }
         #endregion
+
 
         #region Huỷ đơn hàng
         public IActionResult HuyDonHang(int id)
@@ -432,6 +443,7 @@ namespace TheGioiDiaMVC.Controllers
             return RedirectToAction("TheoDoiDonHang");
         }
         #endregion
+            
         #region xem chi tiết
         [Authorize]
         public IActionResult ChiTietDonHang(int MaHd, int page = 1)
@@ -459,6 +471,7 @@ namespace TheGioiDiaMVC.Controllers
             return View();
         }
 
+        #region vnpay
         [Authorize]
         public IActionResult PaymentCallBack()
         {
@@ -489,7 +502,7 @@ namespace TheGioiDiaMVC.Controllers
                 NgayDat = DateTime.Now,
                 CachThanhToan = "VNPay",
                 CachVanChuyen = "VietelPost",
-                MaTrangThai = 1,
+                MaTrangThai = -2,
                 GhiChu = "Thanh toán qua VN PAY"
             };
 
@@ -535,11 +548,6 @@ namespace TheGioiDiaMVC.Controllers
                 return RedirectToAction("PaymentFail");
             }
         }
-
-
-
-
-
-
+        #endregion
     }
 }
