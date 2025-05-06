@@ -1,4 +1,4 @@
-﻿@model TheGioiDiaMVC.ViewModels.DangKyVM
+@model TheGioiDiaMVC.ViewModels.DangKyVM
 @{
     ViewData["Title"] = "Đăng ký";
 }
@@ -93,7 +93,17 @@
                 <button type="submit" class="btn btn-success rounded-pill text-uppercase fw-bold shadow-sm">
                     <i class="fas fa-user-plus me-1"></i> Đăng ký
                 </button>
+
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        Bạn đã có tài khoản?
+                        <a asp-controller="KhachHang" asp-action="DangNhap" class="text-primary fw-bold text-decoration-none">
+                            Đăng nhập tại đây
+                        </a>
+                    </small>
+                </div>
             </div>
+
         </form>
     </div>
 </div>
