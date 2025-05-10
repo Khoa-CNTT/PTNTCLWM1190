@@ -1,4 +1,4 @@
-﻿@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.HoaDon>
+@model X.PagedList.IPagedList<TheGioiDiaMVC.Data.HoaDon>
 @using X.PagedList.Mvc.Core
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -14,7 +14,7 @@
 <table class="table table-bordered mt-3">
     <thead class="table-success">
         <tr>
-            <th>Ngày đặt</th>
+            <th>Thông tin ngày</th>
             <th>Họ tên</th>
             <th>Địa chỉ</th>
             <th>Cách thanh toán</th>
@@ -28,7 +28,11 @@
         @foreach (var item in Model)
         {
             <tr class="table-success">
-                <td>@item.NgayDat.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <div><strong>Ngày Đặt:</strong> @item.NgayDat.ToString("dd/MM/yyyy")</div>
+                    <div><strong>Ngày Giao:</strong> @item.NgayGiao?.ToString("dd/MM/yyyy")</div>
+                    <div><strong>Ngày Nhận:</strong> @item.NgayCan?.ToString("dd/MM/yyyy")</div>
+                </td>
                 <td>@item.HoTen</td>
                 <td>@item.DiaChi</td>
                 <td>@item.CachThanhToan</td>
@@ -36,7 +40,7 @@
                 <td>@item.DienThoai</td>
                 <td>@item.MaTrangThaiNavigation.TenTrangThai</td>
                 <td>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-wrap">
                         <a asp-action="ChiTiet"
                            asp-route-MaHd="@item.MaHd"
                            class="btn btn-sm"
@@ -52,6 +56,7 @@
             </tr>
         }
     </tbody>
+
 </table>
 
 <div class="d-flex justify-content-center mt-4">
