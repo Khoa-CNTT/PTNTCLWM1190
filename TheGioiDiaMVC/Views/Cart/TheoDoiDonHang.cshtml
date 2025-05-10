@@ -113,9 +113,32 @@
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Ngày Đặt:</strong> @item.NgayDat.ToString("dd/MM/yyyy")</p>
+
+                                    @* Hiện Ngày Giao nếu trạng thái phù hợp *@
+                                    @if (
+                                   item.TenTrangThai == "Đang giao hàng" ||
+                                   item.TenTrangThai == "Giao hàng thành công" ||
+                                   item.TenTrangThai == "Đơn hàng đã hoàn tất" ||
+                                   item.TenTrangThai == "Bên giao hàng đã giao cho khách"
+                                   )
+                                    {
+                                        <p><strong>Ngày Giao:</strong> @item.NgayGiao?.ToString("dd/MM/yyyy")</p>
+                                    }
+
+                                    @* Hiện Ngày đã nhận hàng nếu trạng thái phù hợp *@
+                                    @if (
+                                   item.TenTrangThai == "Giao hàng thành công" ||
+                                   item.TenTrangThai == "Đơn hàng đã hoàn tất"
+                                   )
+                                    {
+                                        <p><strong>Ngày đã nhận hàng:</strong> @item.NgayCan?.ToString("dd/MM/yyyy")</p>
+                                    }
+
                                     <p><strong>Cách Thanh Toán:</strong> @item.CachThanhToan</p>
                                     <p><strong>Tổng Thanh Toán:</strong> @((item.ThanhTien + 30000).ToString("#,##0 VND"))</p>
                                 </div>
+
+
                                 <div class="card-footer text-center">
                                     <p><strong>Trạng Thái:</strong> @item.TenTrangThai</p>
                                     @if (item.TenTrangThai == "Đặt hàng thành công ,Chờ xác nhận" || item.TenTrangThai == "Đã thanh toán,Chờ xác nhận")
