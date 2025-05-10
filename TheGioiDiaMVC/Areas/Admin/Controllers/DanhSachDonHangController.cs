@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using X.PagedList.Extensions;
 using Microsoft.EntityFrameworkCore;
+using TheGioiDiaMVC.ViewModels;
 
 namespace TheGioiDiaMVC.Areas.Admin.Controllers
 {
@@ -46,11 +47,25 @@ namespace TheGioiDiaMVC.Areas.Admin.Controllers
             if (donHang != null)
             {
                 donHang.MaTrangThai = trangThai;
+
+                // Nếu trạng thái là "Khách hàng đã nhận"
+                if (trangThai == 3)
+                {
+                    donHang.NgayCan = DateTime.Now;
+                }
+                // Nếu trạng thái là 2 (đang vận chuyển), thì cập nhật ngày giao là thời điểm hiện tại
+                if (trangThai == 2)
+                {
+                    donHang.NgayGiao = DateTime.Now;
+                }
+
                 db.SaveChanges();
             }
+
             return RedirectToAction("Index", new { page = page });
         }
         #endregion
+
 
         #region xem chi tiết
         public IActionResult ChiTiet(int MaHd, int page = 1)
