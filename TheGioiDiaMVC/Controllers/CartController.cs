@@ -383,6 +383,8 @@ namespace TheGioiDiaMVC.Controllers
                 {
                     MaHd = hd.MaHd,
                     NgayDat = hd.NgayDat,
+                    NgayGiao = hd.NgayGiao,
+                    NgayCan = hd.NgayCan,
                     CachThanhToan = hd.CachThanhToan,
                     TenTrangThai = hd.MaTrangThaiNavigation.TenTrangThai,
                     ThanhTien = hd.ChiTietHds.Sum(ct => ct.SoLuong * ct.DonGia)
@@ -432,9 +434,10 @@ namespace TheGioiDiaMVC.Controllers
                 return NotFound();
             }
 
-            if (donHang.MaTrangThai == 2)
+            if (donHang.MaTrangThai == 5)
             {
-                donHang.MaTrangThai = 3; 
+                donHang.MaTrangThai = 3;
+                donHang.NgayCan = DateTime.Now; // 👉 Gán ngày nhận là thời điểm bấm nút
                 db.SaveChanges();
                 TempData["HoanThanhDonHang"] = true;
                 return RedirectToAction("TheoDoiDonHang");
@@ -443,7 +446,8 @@ namespace TheGioiDiaMVC.Controllers
             return RedirectToAction("TheoDoiDonHang");
         }
         #endregion
-            
+
+
         #region xem chi tiết
         [Authorize]
         public IActionResult ChiTietDonHang(int MaHd, int page = 1)
@@ -549,5 +553,10 @@ namespace TheGioiDiaMVC.Controllers
             }
         }
         #endregion
+
+
+
+
+
     }
 }
